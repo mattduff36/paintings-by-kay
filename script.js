@@ -15,15 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Featured images - these will be loaded from the featured folder
     const featuredImages = [
         {
-            src: 'images/featured/focus1.jpg',
+            src: '/images/featured/featured1.jpg',
             title: 'Featured Painting 1'
         },
         {
-            src: 'images/featured/focus2.jpg',
+            src: '/images/featured/featured2.jpg',
             title: 'Featured Painting 2'
         },
         {
-            src: 'images/featured/focus3.jpg',
+            src: '/images/featured/featured3.jpg',
             title: 'Featured Painting 3'
         }
     ];
