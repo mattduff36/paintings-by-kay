@@ -86,6 +86,14 @@ section {
     font-weight: 400;
 }
 
+.hero-logo {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 .about-content {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -289,5 +297,9 @@ footer {
     
     .hero h1 {
         font-size: 2rem;
+    }
+    
+    .hero-logo {
+        max-width: 350px;
     }
 } 
