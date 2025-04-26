@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const galleryGrid = document.getElementById('fullGallery');
-    const imageFolder = 'images/gallery/';
+    const imageFolder = '/images/gallery/';
     const overlay = document.querySelector('.fullscreen-overlay');
     const fullscreenImage = document.querySelector('.fullscreen-image');
     const closeButton = document.querySelector('.close-fullscreen');
@@ -28,71 +28,72 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Static list of gallery images
+    const galleryImages = [
+        'gallery1.JPEG',
+        'gallery2.JPEG',
+        'gallery3.JPEG',
+        'gallery4.JPEG',
+        'gallery5.JPEG',
+        'gallery6.JPEG',
+        'gallery7.JPEG',
+        'gallery8.JPEG',
+        'gallery9.JPEG',
+        'gallery10.JPEG',
+        'gallery11.JPEG',
+        'gallery12.JPEG',
+        'gallery13.JPEG',
+        'gallery14.JPEG',
+        'gallery15.JPEG',
+        'gallery16.JPEG',
+        'gallery17.JPEG',
+        'gallery18.JPEG',
+        'gallery19.JPEG',
+        'gallery20.JPEG',
+        'gallery21.JPEG',
+        'gallery22.JPEG',
+        'gallery23.JPEG',
+        'gallery24.JPEG',
+        'gallery25.JPEG',
+        'gallery26.JPEG',
+        'gallery27.JPEG',
+        'gallery28.JPEG',
+        'gallery29.JPEG',
+        'gallery30.JPEG',
+        'gallery31.JPEG',
+        'gallery32.JPEG',
+        'gallery33.JPEG',
+        'gallery34.JPEG',
+        'gallery35.JPEG',
+        'gallery36.JPEG',
+        'gallery37.JPEG',
+        'gallery38.JPEG',
+        'gallery39.JPEG',
+        'gallery40.JPEG'
+    ];
+
     // Function to load gallery images
     function loadGalleryImages() {
         // Clear existing gallery items
         galleryGrid.innerHTML = '';
 
-        // Get all images from the server
-        fetch(imageFolder)
-            .then(response => response.text())
-            .then(html => {
-                // Create a temporary DOM element to parse the HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                // Get all links (files) from the directory listing
-                const links = Array.from(doc.querySelectorAll('a'))
-                    .map(link => link.href)
-                    .filter(href => href.match(/gallery\d+\.JPEG$/i))
-                    .map(href => href.split('/').pop());
-
-                // Sort images numerically
-                links.sort((a, b) => {
-                    const numA = parseInt(a.match(/\d+/)[0]);
-                    const numB = parseInt(b.match(/\d+/)[0]);
-                    return numA - numB;
-                });
-
-                // Create gallery items for each image
-                links.forEach(image => {
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = 'gallery-item';
-                    
-                    const img = document.createElement('img');
-                    img.src = `${imageFolder}${image}`;
-                    img.alt = `Gallery Image ${image.match(/\d+/)[0]}`;
-                    
-                    // Add click event for fullscreen
-                    img.addEventListener('click', () => {
-                        openFullscreen(img.src);
-                    });
-                    
-                    galleryItem.appendChild(img);
-                    galleryGrid.appendChild(galleryItem);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading gallery images:', error);
-                // Fallback to static list if fetch fails
-                const fallbackImages = Array.from({length: 40}, (_, i) => `gallery${i + 1}.JPEG`);
-                fallbackImages.forEach(image => {
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = 'gallery-item';
-                    
-                    const img = document.createElement('img');
-                    img.src = `${imageFolder}${image}`;
-                    img.alt = `Gallery Image ${image.match(/\d+/)[0]}`;
-                    
-                    // Add click event for fullscreen
-                    img.addEventListener('click', () => {
-                        openFullscreen(img.src);
-                    });
-                    
-                    galleryItem.appendChild(img);
-                    galleryGrid.appendChild(galleryItem);
-                });
+        // Create gallery items for each image
+        galleryImages.forEach(image => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            img.src = `${imageFolder}${image}`;
+            img.alt = `Gallery Image ${image.match(/\d+/)[0]}`;
+            
+            // Add click event for fullscreen
+            img.addEventListener('click', () => {
+                openFullscreen(img.src);
             });
+            
+            galleryItem.appendChild(img);
+            galleryGrid.appendChild(galleryItem);
+        });
     }
 
     loadGalleryImages();
