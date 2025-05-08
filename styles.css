@@ -60,6 +60,7 @@ nav {
 
 main {
     margin-top: 80px;
+    padding: 0 4rem;
 }
 
 section {
@@ -116,16 +117,21 @@ section {
     margin-bottom: 1rem;
 }
 
-.gallery h2 {
+.gallery-title {
     text-align: center;
     color: var(--primary-color);
-    margin-bottom: 2rem;
+    margin: 2rem 0;
+    font-size: 2.5rem;
+    font-weight: 500;
+    padding-top: 2rem;
 }
 
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .gallery-item {
@@ -285,6 +291,14 @@ footer {
     padding: 2rem;
     background-color: white;
     color: var(--text-color);
+}
+
+.gallery-note {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 1.1rem;
+    color: #666;
+    font-style: italic;
 }
 
 @media (max-width: 768px) {
