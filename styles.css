@@ -60,11 +60,11 @@ nav {
 
 main {
     margin-top: 80px;
-    padding: 2rem 3rem 0 4rem;
+    padding: 0 1rem;
 }
 
 section {
-    padding: 4rem 2rem;
+    padding: 4rem 0;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -73,6 +73,8 @@ section {
     background-color: var(--secondary-color);
     text-align: center;
     padding: 6rem 2rem;
+    max-width: none;
+    margin: 0;
 }
 
 .hero-content {
