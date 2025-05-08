@@ -60,7 +60,7 @@ nav {
 
 main {
     margin-top: 80px;
-    padding: 0 4rem;
+    padding: 2rem 3rem 0 4rem;
 }
 
 section {
@@ -120,10 +120,9 @@ section {
 .gallery-title {
     text-align: center;
     color: var(--primary-color);
-    margin: 2rem 0;
+    margin: 2rem 0 1rem 0;
     font-size: 2.5rem;
     font-weight: 500;
-    padding-top: 2rem;
 }
 
 .gallery-grid {
@@ -295,7 +294,7 @@ footer {
 
 .gallery-note {
     text-align: center;
-    margin: 2rem 0;
+    margin: 1rem 0 2rem 0;
     font-size: 1.1rem;
     color: #666;
     font-style: italic;
