@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize EmailJS
+    emailjs.init("-EYjcIt9a7RneUgK9");
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -42,20 +45,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle contact form submission
     const contactForm = document.getElementById('contact-form');
+    const submitButton = document.getElementById('submit-button');
+    const formStatus = document.getElementById('form-status');
+
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Get form data
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
+            // Disable submit button and show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
             
-            // Here you would typically send the data to a server
-            console.log('Form submitted:', data);
-            
-            // Show success message
-            alert('Thank you for your message! I will get back to you soon.');
-            contactForm.reset();
+            try {
+                // Get form data
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData);
+                
+                // Send email
+                await emailjs.send(
+                    "paintingsbykay",
+                    "template_gif0qpg",
+                    {
+                        from_name: data.name,
+                        from_email: data.email,
+                        message: data.message
+                    }
+                );
+                
+                // Show success message
+                formStatus.textContent = 'Thank you for your message! I will get back to you soon.';
+                formStatus.className = 'form-status success';
+                contactForm.reset();
+            } catch (error) {
+                // Show error message
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'form-status error';
+                console.error('Error sending email:', error);
+            } finally {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
+            }
         });
     }
 
