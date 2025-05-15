@@ -3,21 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paintings by Kay</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title>Paintings by Kay | Original Canvas Paintings for Sale in Mansfield, Nottinghamshire</title>
+    <meta name="description" content="Discover unique original canvas paintings for sale in Mansfield, Nottinghamshire. Browse nature-inspired artwork by local artist Kay. Commission inquiries welcome.">
+    <meta name="keywords" content="paintings for sale, canvas paintings, original artwork, Mansfield, Nottinghamshire, nature paintings, local artist, acrylic paintings, landscape art, UK artist">
+    
+    <!-- Resource Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/images/logos/logo-transparent.webp" as="image" type="image/webp">
+    <link rel="preload" href="/styles.css" as="style">
+    <link rel="preload" href="/script.js" as="script">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://paintings-by-kay.com/">
+    <meta property="og:title" content="Paintings by Kay | Original Canvas Paintings for Sale in Mansfield">
+    <meta property="og:description" content="Discover unique original canvas paintings for sale in Mansfield, Nottinghamshire. Browse nature-inspired artwork by local artist Kay.">
+    <meta property="og:image" content="/images/Logo_transbg_big.png">
+    <meta property="og:site_name" content="Paintings by Kay">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://paintings-by-kay.com/">
+    <meta property="twitter:title" content="Paintings by Kay | Original Canvas Paintings for Sale in Mansfield">
+    <meta property="twitter:description" content="Discover unique original canvas paintings for sale in Mansfield, Nottinghamshire. Browse nature-inspired artwork by local artist Kay.">
+    <meta property="twitter:image" content="/images/Logo_transbg_big.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://paintings-by-kay.com/">
+
+    <!-- Existing styles and fonts -->
+    <link rel="stylesheet" href="/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Enhanced Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ArtGallery",
+        "name": "Paintings by Kay",
+        "description": "Original canvas paintings for sale in Mansfield, Nottinghamshire. Nature-inspired artwork by local artist Kay.",
+        "url": "https://paintings-by-kay.com",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Mansfield",
+            "addressRegion": "Nottinghamshire",
+            "addressCountry": "UK"
+        },
+        "image": "/images/Logo_transbg_big.png",
+        "priceRange": "££",
+        "openingHours": "Mo-Su 09:00-17:00",
+        "telephone": "+44XXXXXXXXXX",
+        "sameAs": [
+            "https://www.facebook.com/paintingsbykay",
+            "https://www.instagram.com/paintingsbykay"
+        ],
+        "hasMap": "https://www.google.com/maps?cid=YOUR_GOOGLE_MAPS_CID",
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "YOUR_LATITUDE",
+            "longitude": "YOUR_LONGITUDE"
+        }
+    }
+    </script>
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://paintings-by-kay.com/"
+        }]
+    }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Do you accept commissions for custom paintings?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, I occasionally accept commissions, although I prefer painting landscapes and scenery rather than people."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What type of paintings do you create?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "I mostly paint nature scenes — trees, skies, water, seaside views — working from photographs that catch my eye with their beautiful colors. I mainly use acrylic paints (and sometimes oils)."
+            }
+        }]
+    }
+    </script>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <a href="#home"><img src="/images/Logo_transbg_big.png" alt="Paintings by Kay Logo"></a>
+                <a href="#home">
+                    <picture>
+                        <source srcset="/images/logos/logo-transparent.webp" type="image/webp">
+                        <source srcset="/images/logos/logo-transparent.png" type="image/png">
+                        <img src="/images/logos/logo-transparent.png" 
+                             alt="Paintings by Kay Logo" 
+                             width="200" 
+                             height="auto"
+                             loading="eager"
+                             decoding="async">
+                    </picture>
+                </a>
             </div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -27,7 +138,17 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-content">
-                <img src="/images/Logo_transbg_big.png" alt="Paintings by Kay Logo" class="hero-logo">
+                <picture>
+                    <source srcset="/images/logos/logo-transparent.webp" type="image/webp">
+                    <source srcset="/images/logos/logo-transparent.png" type="image/png">
+                    <img src="/images/logos/logo-transparent.png" 
+                         alt="Paintings by Kay Logo" 
+                         class="hero-logo"
+                         width="300" 
+                         height="auto"
+                         loading="eager"
+                         decoding="async">
+                </picture>
                 <p>A collection of nature-inspired paintings created with love and passion</p>
             </div>
         </section>
@@ -35,14 +156,31 @@
         <section id="about" class="about">
             <div class="about-content">
                 <div class="about-image">
-                    <img src="/images/Kay.JPEG" alt="Kay">
+                    <picture>
+                        <source media="(max-width: 768px)" 
+                                srcset="/images/profile/kay-profile-mobile.webp" 
+                                type="image/webp">
+                        <source media="(max-width: 768px)" 
+                                srcset="/images/profile/kay-profile-mobile.jpg" 
+                                type="image/jpeg">
+                        <source srcset="/images/profile/kay-profile.webp" 
+                                type="image/webp">
+                        <source srcset="/images/profile/kay-profile.jpg" 
+                                type="image/jpeg">
+                        <img src="/images/profile/kay-profile.jpg" 
+                             alt="Kay - Local artist from Mansfield, Nottinghamshire" 
+                             width="800" 
+                             height="auto"
+                             loading="eager"
+                             decoding="async">
+                    </picture>
                 </div>
                 <div class="about-text">
                     <h2>Hi, I'm Kay</h2>
-                    <p>I started painting in 2013 after being inspired by watching Bob Ross. What began as a bit of fun quickly became a much-loved hobby and a way for me to relax.</p>
-                    <p>I mostly paint nature scenes — trees, skies, water, seaside views — working from photographs that catch my eye with their beautiful colors. I mainly use acrylic paints (and sometimes oils), but acrylic is my favorite.</p>
-                    <p>Painting is purely a passion for me, not a career. I occasionally accept commissions, although I prefer painting landscapes and scenery rather than people.</p>
-                    <p>Thank you for visiting — I hope you enjoy my work as much as I enjoy creating it.</p>
+                    <p>I started painting in 2013 after being inspired by watching Bob Ross. What began as a bit of fun quickly became a much-loved hobby and a way for me to relax and express my creativity.</p>
+                    <p>I specialize in nature-inspired artwork — from serene woodland scenes and dramatic skies to tranquil waters and coastal landscapes. Each piece is carefully crafted using high-quality acrylic paints (and occasionally oils), capturing the beauty of the natural world through my unique perspective.</p>
+                    <p>While painting is my passion rather than my profession, I do take on select commissions. I particularly enjoy creating custom landscape and scenery pieces that bring the beauty of nature into your home.</p>
+                    <p>Thank you for exploring my collection of original paintings. I hope you enjoy my artwork as much as I enjoy creating it.</p>
                 </div>
             </div>
         </section>

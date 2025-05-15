@@ -39,6 +39,8 @@ nav {
 
 .logo img {
     height: 50px;
+    width: auto;
+    object-fit: contain;
 }
 
 .nav-links {
@@ -61,20 +63,23 @@ nav {
 main {
     margin-top: 80px;
     padding: 0 1rem;
+    scroll-margin-top: 80px;
 }
 
 section {
     padding: 4rem 0;
     max-width: 1200px;
     margin: 0 auto;
+    scroll-margin-top: 80px;
 }
 
 .hero {
     background-color: var(--secondary-color);
     text-align: center;
-    padding: 6rem 2rem;
+    padding: 4rem 0;
     max-width: none;
     margin: 0;
+    scroll-margin-top: 80px;
 }
 
 .hero-content {
@@ -125,6 +130,11 @@ section {
     margin: 2rem 0 1rem 0;
     font-size: 2.5rem;
     font-weight: 500;
+    scroll-margin-top: 80px;
+}
+
+#top {
+    scroll-margin-top: 80px;
 }
 
 .gallery-grid {
@@ -326,4 +336,14 @@ footer {
     .contact-content {
         padding: 0 1rem;
     }
+}
+
+.gallery {
+    position: relative;
+}
+
+.gallery h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
 } 

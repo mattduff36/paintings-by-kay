@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "live-server",
+    "optimize-images": "node optimize-images.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "sharp": "^0.33.2"
   }
 } 

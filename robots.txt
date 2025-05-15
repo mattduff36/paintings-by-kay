@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /gallery.html
+Allow: /images/
+
+# Sitemap location
+Sitemap: https://paintings-by-kay.com/sitemap.xml
+
+# Disallow any potential admin or system files
+Disallow: /_vercel/
+Disallow: /node_modules/
+Disallow: /.git/ 
