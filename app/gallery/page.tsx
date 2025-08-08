@@ -1,4 +1,5 @@
-import FullscreenMount from './FullscreenMount';
+import dynamic from 'next/dynamic';
+const FullscreenMount = dynamic(() => import('./FullscreenMount'), { ssr: false });
 export default function GalleryPage() {
   const images = Array.from({ length: 40 }).map((_, i) => i + 1);
   return (
