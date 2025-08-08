@@ -3,7 +3,7 @@ export const metadata = {
   description: 'Original canvas paintings by Kay',
 };
 
-import './globals.css';
+import '../globals.css';
 import '../../styles.css';
 import { SiteNav } from './components/site-nav';
 import React from 'react';
