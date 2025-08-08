@@ -1,43 +1,60 @@
-# Paintings by Kay
+# Paintings by Kay (Next.js)
 
-A portfolio website showcasing the artwork of Kay Duff. Built with HTML, CSS, and JavaScript.
+Modern Next.js App Router site for Kay Duff’s artwork. Server-rendered pages, Stripe Checkout, and an admin dashboard for managing products.
 
-## Features
+## Tech Stack
+- Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS
+- Stripe (Checkout + webhook)
+- Postgres (Neon or compatible) via `pg`
 
-- Responsive design
-- Dynamic gallery with fullscreen view
-- Featured paintings section
-- Contact form
-- Smooth scrolling navigation
+## Local Development
+1. Copy `.env.local` and set required variables:
+   - `ADMIN_PASSWORD` — password for `/admin`
+   - `DATABASE_URL` — Postgres connection string
+   - `STRIPE_SECRET_KEY` — Stripe secret key
+   - `STRIPE_WEBHOOK_SECRET` — Stripe webhook signing secret
+   - `NEXT_PUBLIC_SITE_URL` — e.g. `https://www.paintingsbykay.co.uk` (no trailing slash)
+2. Install deps and run dev server:
+   - `npm install`
+   - `npm run dev`
 
-## Project Structure
+## Routes
+- `/` — Home
+- `/gallery` — Responsive gallery with fullscreen client behavior
+- `/shop` — SSR products for sale; integrates Stripe Checkout
+- `/admin` — Password-gated admin (create/publish/hide/sold/delete)
 
-```
-paintings-by-kay/
-├── images/
-│   ├── featured/     # Featured paintings
-│   ├── gallery/      # Full gallery paintings
-│   └── Kay.JPEG      # About section image
-├── index.html        # Home page
-├── gallery.html      # Full gallery page
-├── styles.css        # Main stylesheet
-├── script.js         # Home page scripts
-├── gallery.js        # Gallery page scripts
-└── README.md         # Project documentation
-```
+### API
+- `POST /api/checkout` — creates Stripe Checkout Session
+- `POST /api/stripe/webhook` — marks item sold on successful payment
+- `GET/POST /api/admin/products` — list/create products (auth via cookie + middleware)
+- `PATCH/DELETE /api/admin/products/[id]` — update/delete product
 
-## Setup
+## Deployment (Vercel)
+1. Project Settings → General
+   - Framework Preset: Next.js
+   - Build Command: `next build`
+   - Output Directory: `.next`
+2. Project Settings → Environment Variables
+   - Set all vars from the Local Development section
+3. Project Settings → Domains
+   - Add and assign: `www.paintingsbykay.co.uk` and `paintingsbykay.co.uk` to THIS project
+   - Choose a primary (e.g., `www`) and configure redirect from the other to it
+4. DNS (at registrar)
+   - `www` CNAME → `cname.vercel-dns.com`
+   - Apex `@` A/ALIAS → `76.76.21.21`
+5. Redirects
+   - Legacy static files removed. Ensure there is NO redirect of `/` → `/index.html`
+   - Next.js redirects are defined in `next.config.js` for `/index.html` and `/index` → `/`
+6. Redeploy and Invalidate Cache to pick up changes
 
-1. Clone the repository
-2. Open `index.html` in your browser to view the website locally
+### Stripe
+- Set the production webhook URL in Stripe Dashboard: `https://www.paintingsbykay.co.uk/api/stripe/webhook`
+- Use test card details for testing in Stripe Test Mode
 
-## Deployment
+## Notes
+- Service worker is not configured; `GET /sw.js 404` is expected
+- Static legacy files `index.html` and `gallery.html` were removed to avoid routing conflicts
 
-This website is designed to be deployed on Vercel. Simply connect your GitHub repository to Vercel and it will automatically deploy your site.
-
-## Technologies Used
-
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- Google Fonts (Quicksand) 
+## Troubleshooting
+- 404 at custom domain but preview URL works: the domain isn’t assigned to this project or has a conflicting redirect. Assign the domain(s) to this project in Vercel → Domains and remove any `/index.html` forwarding.
