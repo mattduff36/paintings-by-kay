@@ -2,15 +2,17 @@ import Link from 'next/link';
 
 export function SiteNav() {
   return (
-    <nav className="mx-auto flex max-w-6xl items-center justify-between p-4">
+    <nav>
       <div className="logo">
-        <Link href="/">
-          <img src="/images/logos/logo-transparent.webp" alt="Paintings by Kay Logo" className="h-12 w-auto" />
+        <Link href="/#home">
+          <img src="/images/logos/logo-transparent.webp" alt="Paintings by Kay Logo" width={200} height={80} />
         </Link>
       </div>
-      <ul className="flex list-none gap-6">
+      <ul className="nav-links">
         <li><Link href="/">Home</Link></li>
         <li><Link href="/gallery">Gallery</Link></li>
+        <li><Link href="/#about">About</Link></li>
+        <li><Link href="/#contact">Contact</Link></li>
         <li><Link href="/shop">Shop</Link></li>
       </ul>
     </nav>
