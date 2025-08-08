@@ -2,14 +2,10 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { markSold } from '@/lib/db/products';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
-  const sig = (request.headers as any).get('stripe-signature');
+  const sig = request.headers.get('stripe-signature');
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!sig || !secret) return NextResponse.json({ ok: true });
 
