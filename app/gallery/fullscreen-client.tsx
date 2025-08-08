@@ -23,24 +23,29 @@ export function FullscreenClient() {
       fullscreenImage.src = '';
     }
 
-    closeButton.addEventListener('click', closeFullscreen);
-    overlay.addEventListener('click', (e) => {
+    const onOverlayClick = (e: Event) => {
       if (e.target === overlay) closeFullscreen();
-    });
-    document.addEventListener('keydown', (e) => {
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && overlay.style.display === 'block') closeFullscreen();
-    });
+    };
 
-    const images = document.querySelectorAll('#fullGallery .gallery-item picture img');
-    images.forEach((img) => {
-      img.addEventListener('click', () => openFullscreen((img as HTMLImageElement).src));
-    });
+    closeButton.addEventListener('click', closeFullscreen);
+    overlay.addEventListener('click', onOverlayClick);
+    document.addEventListener('keydown', onKeyDown);
+
+    const images = Array.from(document.querySelectorAll('#fullGallery .gallery-item picture img')) as HTMLImageElement[];
+    const onImageClick = (ev: Event) => {
+      const target = ev.currentTarget as HTMLImageElement;
+      openFullscreen(target.src);
+    };
+    images.forEach((img) => img.addEventListener('click', onImageClick));
 
     return () => {
       closeButton.removeEventListener('click', closeFullscreen);
-      overlay.removeEventListener('click', () => {});
-      document.removeEventListener('keydown', () => {} as any);
-      images.forEach((img) => img.removeEventListener('click', () => {}));
+      overlay.removeEventListener('click', onOverlayClick);
+      document.removeEventListener('keydown', onKeyDown);
+      images.forEach((img) => img.removeEventListener('click', onImageClick));
     };
   }, []);
 
