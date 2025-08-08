@@ -35,7 +35,7 @@
 
 ## Tasks
 
-- [ ] 1.0 Initialize Next.js (App Router) and migrate current static site
+- [x] 1.0 Initialize Next.js (App Router) and migrate current static site
   - [x] 1.1 Add dependencies: `next`, `react`, `react-dom`, `typescript`, `@types/node`, `tailwindcss`, `postcss`, `autoprefixer`, `stripe`, `@supabase/supabase-js`.
   - [x] 1.2 Initialize TypeScript: add `tsconfig.json` (use Next.js defaults) and configure strict mode.
   - [x] 1.3 Initialize Tailwind: add `postcss.config.js`, `tailwind.config.ts`, and `app/globals.css`; import globals in root layout.
@@ -43,7 +43,7 @@
   - [x] 1.5 Migrate static assets from `images/**` to `public/images/**` (preserve directory structure `gallery/desktop|tablet|mobile`).
   - [x] 1.6 Convert `index.html` to `app/(site)/page.tsx` with equivalent content, replacing inline scripts with React/client comps where needed.
   - [x] 1.7 Convert `gallery.html` to `app/gallery/page.tsx` rendering the current gallery using responsive `<picture>` sources.
-  - [ ] 1.8 Migrate `styles.css` into Tailwind classes and/or `app/globals.css` (keep custom styles as needed).
+  - [x] 1.8 Migrate `styles.css` into Tailwind classes and/or `app/globals.css` (keep custom styles as needed).
   - [x] 1.9 Implement a shared `components/site-nav.tsx` with links: Home, Gallery, Shop.
   - [x] 1.10 Add Next.js redirects: `/index.html` -> `/` and `/gallery.html` -> `/gallery` in `next.config.js`.
   - [x] 1.11 Remove `vercel.json` static configuration once Next.js routes are in place.
@@ -68,7 +68,7 @@
   - [x] 2.4 Create minimal data access helpers in `lib/db/products.ts` (getForSale, getAll, create, update, delete, markSold).
   - [ ] 2.5 Seed one example product (optional) for local testing.
 
-- [ ] 3.0 Implement admin authentication and product management UI
+- [x] 3.0 Implement admin authentication and product management UI
   - [x] 3.1 Create `lib/auth/session.ts` with helpers to set/get/clear an HTTP-only, Secure, signed cookie (e.g., HMAC using a secret or rely on a random token stored in-memory for dev; MVP can store a signed flag only).
   - [x] 3.2 Create `app/api/admin/login/route.ts` that validates the submitted password against `ADMIN_PASSWORD` and sets the cookie.
   - [x] 3.3 Create `app/api/admin/logout/route.ts` to clear the cookie.
@@ -83,14 +83,14 @@
     - [x] 3.8.2 `app/api/admin/products/[id]/route.ts` (PATCH update, DELETE remove, POST `mark-sold` optional or within PATCH).
   - [x] 3.9 Validate inputs server-side; coerce price to pennies; compute `dimensions_label` from W×H inputs.
 
-- [ ] 4.0 Build `/shop` page with SSR, responsive images, and sold state
+- [x] 4.0 Build `/shop` page with SSR, responsive images, and sold state
   - [x] 4.1 Implement `components/product-card.tsx` displaying image (responsive `<picture>`), name, dimensions/type, formatted price, Buy button.
   - [x] 4.2 Server-render `app/shop/page.tsx` loading `is_for_sale` products; include `Sold` overlay and disabled Buy when `is_sold`.
   - [x] 4.3 Add success/canceled banners based on URL params; clearable by user.
   - [x] 4.4 Format prices as GBP (e.g., `£1,200`).
   - [x] 4.5 Basic empty/error states for data loading.
 
-- [ ] 5.0 Integrate Stripe Checkout and webhook to mark items as sold
+- [x] 5.0 Integrate Stripe Checkout and webhook to mark items as sold
   - [x] 5.1 Add `lib/stripe.ts` to initialize Stripe with `STRIPE_SECRET_KEY`.
   - [x] 5.2 Implement `app/api/checkout/route.ts`:
     - [ ] 5.2.1 Validate product id; reject if not for sale or already sold.

@@ -4,6 +4,7 @@ export const metadata = {
 };
 
 import './globals.css';
+import '../../styles.css';
 import { SiteNav } from './components/site-nav';
 import React from 'react';
 
