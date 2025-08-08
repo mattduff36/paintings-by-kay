@@ -36,7 +36,18 @@
 ## Tasks
 
 - [ ] 1.0 Initialize Next.js (App Router) and migrate current static site
-  - [ ] 1.1 Add dependencies: `next`, `react`, `react-dom`, `typescript`, `@types/node`, `tailwindcss`, `postcss`, `autoprefixer`, `stripe`, `@supabase/supabase-js`.
+  - [x] 1.1 Add dependencies: `next`, `react`, `react-dom`, `typescript`, `@types/node`, `tailwindcss`, `postcss`, `autoprefixer`, `stripe`, `@supabase/supabase-js`.
+  - [x] 1.2 Initialize TypeScript: add `tsconfig.json` (use Next.js defaults) and configure strict mode.
+  - [x] 1.3 Initialize Tailwind: add `postcss.config.js`, `tailwind.config.ts`, and `app/globals.css`; import globals in root layout.
+  - [x] 1.4 Create Next.js `app` directory with `(site)/layout.tsx` and a basic header/footer.
+  - [x] 1.5 Migrate static assets from `images/**` to `public/images/**` (preserve directory structure `gallery/desktop|tablet|mobile`).
+  - [x] 1.6 Convert `index.html` to `app/(site)/page.tsx` with equivalent content, replacing inline scripts with React/client comps where needed.
+  - [x] 1.7 Convert `gallery.html` to `app/gallery/page.tsx` rendering the current gallery using responsive `<picture>` sources.
+  - [ ] 1.8 Migrate `styles.css` into Tailwind classes and/or `app/globals.css` (keep custom styles as needed).
+  - [x] 1.9 Implement a shared `components/site-nav.tsx` with links: Home, Gallery, Shop.
+  - [x] 1.10 Add Next.js redirects: `/index.html` -> `/` and `/gallery.html` -> `/gallery` in `next.config.js`.
+  - [ ] 1.11 Remove `vercel.json` static configuration once Next.js routes are in place.
+  - [ ] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
   - [ ] 1.2 Initialize TypeScript: add `tsconfig.json` (use Next.js defaults) and configure strict mode.
   - [ ] 1.3 Initialize Tailwind: add `postcss.config.js`, `tailwind.config.ts`, and `app/globals.css`; import globals in root layout.
   - [ ] 1.4 Create Next.js `app` directory with `(site)/layout.tsx` and a basic header/footer.

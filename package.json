@@ -4,7 +4,10 @@
   "description": "A website showcasing paintings by Kay",
   "main": "index.js",
   "scripts": {
-    "start": "live-server",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "optimize-images": "node optimize-images.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,8 +18,20 @@
   ],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "next": "^14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^16.6.0"
+  },
   "devDependencies": {
+    "@types/node": "^20.14.12",
+    "autoprefixer": "^10.4.19",
     "live-server": "^1.2.2",
-    "sharp": "^0.33.5"
+    "postcss": "^8.4.39",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^3.4.7",
+    "typescript": "^5.5.4"
   }
 }
