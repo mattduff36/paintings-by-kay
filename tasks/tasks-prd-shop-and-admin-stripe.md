@@ -48,17 +48,7 @@
   - [x] 1.10 Add Next.js redirects: `/index.html` -> `/` and `/gallery.html` -> `/gallery` in `next.config.js`.
   - [x] 1.11 Remove `vercel.json` static configuration once Next.js routes are in place.
   - [x] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
-  - [ ] 1.2 Initialize TypeScript: add `tsconfig.json` (use Next.js defaults) and configure strict mode.
-  - [ ] 1.3 Initialize Tailwind: add `postcss.config.js`, `tailwind.config.ts`, and `app/globals.css`; import globals in root layout.
-  - [ ] 1.4 Create Next.js `app` directory with `(site)/layout.tsx` and a basic header/footer.
-  - [ ] 1.5 Migrate static assets from `images/**` to `public/images/**` (preserve directory structure `gallery/desktop|tablet|mobile`).
-  - [ ] 1.6 Convert `index.html` to `app/(site)/page.tsx` with equivalent content, replacing inline scripts with React/client comps where needed.
-  - [ ] 1.7 Convert `gallery.html` to `app/gallery/page.tsx` rendering the current gallery using responsive `<picture>` sources.
-  - [ ] 1.8 Migrate `styles.css` into Tailwind classes and/or `app/globals.css` (keep custom styles as needed).
-  - [ ] 1.9 Implement a shared `components/site-nav.tsx` with links: Home, Gallery, Shop.
-  - [ ] 1.10 Add Next.js redirects: `/index.html` -> `/` and `/gallery.html` -> `/gallery` in `next.config.js`.
-  - [ ] 1.11 Remove `vercel.json` static configuration once Next.js routes are in place.
-  - [ ] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
+  - [ ] (duplicate lines removed)
 
 - [x] 2.0 Set up Supabase schema and secure server integration
   - [x] 2.1 Create `lib/supabase/server.ts` that instantiates an Admin client using `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (server-only).
@@ -74,8 +64,8 @@
   - [x] 3.3 Create `app/api/admin/logout/route.ts` to clear the cookie.
   - [x] 3.4 Add `middleware.ts` to protect `/admin` and `/api/admin/*` by checking the session cookie; redirect to `/admin` login view if missing.
   - [x] 3.5 Implement `app/admin/page.tsx`:
-    - [ ] 3.5.1 If not authenticated: render password form that POSTs to `/api/admin/login`.
-    - [ ] 3.5.2 If authenticated: render dashboard with product list and create/edit form.
+    - [x] 3.5.1 If not authenticated: render password form that POSTs to `/api/admin/login`.
+    - [x] 3.5.2 If authenticated: render dashboard with product list and create/edit form.
   - [x] 3.6 Build `components/admin/product-form.tsx` with fields: Name, Dimensions (W×H), Type, Price (GBP), Notes, and Image Path selector.
   - [x] 3.7 Implement image selector: `lib/gallery-assets.ts` lists files under `public/images/gallery/desktop/*.webp`; UI allows picking one and stores its path.
   - [x] 3.8 Create admin APIs:
@@ -93,21 +83,21 @@
 - [x] 5.0 Integrate Stripe Checkout and webhook to mark items as sold
   - [x] 5.1 Add `lib/stripe.ts` to initialize Stripe with `STRIPE_SECRET_KEY`.
   - [x] 5.2 Implement `app/api/checkout/route.ts`:
-    - [ ] 5.2.1 Validate product id; reject if not for sale or already sold.
-    - [ ] 5.2.2 Create Checkout Session with `price_data` (GBP), quantity 1; set `success_url` `/shop?success=1&session_id={CHECKOUT_SESSION_ID}` and `cancel_url` `/shop?canceled=1`.
-    - [ ] 5.2.3 Include `product_id` in `metadata` for webhook correlation.
-    - [ ] 5.2.4 Return the session URL; client redirects.
+    - [x] 5.2.1 Validate product id; reject if not for sale or already sold.
+    - [x] 5.2.2 Create Checkout Session with `price_data` (GBP), quantity 1; set `success_url` `/shop?success=1&session_id={CHECKOUT_SESSION_ID}` and `cancel_url` `/shop?canceled=1`.
+    - [x] 5.2.3 Include `product_id` in `metadata` for webhook correlation.
+    - [x] 5.2.4 Return the session URL; client redirects.
   - [x] 5.3 Implement `app/api/stripe/webhook/route.ts` verifying signature with `STRIPE_WEBHOOK_SECRET`.
   - [x] 5.4 On `checkout.session.completed`, read `metadata.product_id`, update DB: set `is_sold=true`, `is_for_sale=false`.
   - [x] 5.5 Idempotency: guard against duplicate events (e.g., store processed event id or rely on UPSERT semantics).
   - [ ] 5.6 Manual QA: create product, buy via Stripe test mode, confirm webhook marks item sold.
 
 - [ ] 6.0 Configure deployment, environment variables, and navigation updates
-  - [ ] 6.1 Add `Shop` link in `components/site-nav.tsx` for all pages.
-  - [ ] 6.2 Create `next.config.js` redirects for legacy `.html` paths.
-  - [ ] 6.3 Prepare `.env.local.example` documenting required env vars: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
+  - [x] 6.1 Add `Shop` link in `components/site-nav.tsx` for all pages.
+  - [x] 6.2 Create `next.config.js` redirects for legacy `.html` paths.
+  - [x] 6.3 Prepare `.env.local.example` documenting required env vars: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
   - [ ] 6.4 Configure Vercel project env vars and set the webhook endpoint in Stripe dashboard (or via CLI).
-  - [ ] 6.5 Update sitemap if present to include `/shop` (optional) and ensure `/admin` is excluded from any links.
+  - [x] 6.5 Update sitemap if present to include `/shop` (optional) and ensure `/admin` is excluded from any links.
   - [ ] 6.6 Final QA pass: nav works, images load, `/shop` lists products, checkout flow completes, webhook marks sold.
 
 
