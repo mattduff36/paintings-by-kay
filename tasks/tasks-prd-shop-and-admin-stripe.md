@@ -47,7 +47,7 @@
   - [x] 1.9 Implement a shared `components/site-nav.tsx` with links: Home, Gallery, Shop.
   - [x] 1.10 Add Next.js redirects: `/index.html` -> `/` and `/gallery.html` -> `/gallery` in `next.config.js`.
   - [x] 1.11 Remove `vercel.json` static configuration once Next.js routes are in place.
-  - [ ] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
+  - [x] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
   - [ ] 1.2 Initialize TypeScript: add `tsconfig.json` (use Next.js defaults) and configure strict mode.
   - [ ] 1.3 Initialize Tailwind: add `postcss.config.js`, `tailwind.config.ts`, and `app/globals.css`; import globals in root layout.
   - [ ] 1.4 Create Next.js `app` directory with `(site)/layout.tsx` and a basic header/footer.
@@ -60,7 +60,7 @@
   - [ ] 1.11 Remove `vercel.json` static configuration once Next.js routes are in place.
   - [ ] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
 
-- [ ] 2.0 Set up Supabase schema and secure server integration
+- [x] 2.0 Set up Supabase schema and secure server integration
   - [x] 2.1 Create `lib/supabase/server.ts` that instantiates an Admin client using `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (server-only).
   - [x] 2.2 Define SQL for `products` table with fields:
     - `id uuid pk`, `name text not null`, `dimensions_w_cm int not null`, `dimensions_h_cm int not null`, `dimensions_label text not null`, `type text not null`, `price_gbp_pennies int not null`, `notes text`, `image_path text not null unique`, `is_for_sale boolean not null default false`, `is_sold boolean not null default false`, `stripe_product_id text`, `stripe_price_id text`, timestamps.
