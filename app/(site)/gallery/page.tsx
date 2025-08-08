@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
-const FullscreenMount = dynamic(() => import('./FullscreenMount').then(m => m.default), { ssr: false });
+// Use absolute import to avoid any dev-time chunk resolution issues
+const FullscreenMount = dynamic(() => import('@/app/(site)/gallery/FullscreenMount'), { ssr: false });
 export default function GalleryPage() {
   const images = Array.from({ length: 40 }).map((_, i) => i + 1);
   return (
