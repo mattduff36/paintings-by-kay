@@ -61,44 +61,44 @@
   - [ ] 1.12 Smoke-test local dev: `pnpm|npm run dev` loads home and gallery with images.
 
 - [ ] 2.0 Set up Supabase schema and secure server integration
-  - [ ] 2.1 Create `lib/supabase/server.ts` that instantiates an Admin client using `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (server-only).
+  - [x] 2.1 Create `lib/supabase/server.ts` that instantiates an Admin client using `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (server-only).
   - [ ] 2.2 Define SQL for `products` table with fields:
     - `id uuid pk`, `name text not null`, `dimensions_w_cm int not null`, `dimensions_h_cm int not null`, `dimensions_label text not null`, `type text not null`, `price_gbp_pennies int not null`, `notes text`, `image_path text not null unique`, `is_for_sale boolean not null default false`, `is_sold boolean not null default false`, `stripe_product_id text`, `stripe_price_id text`, timestamps.
   - [ ] 2.3 Apply RLS with policies: deny all by default; API uses service role key (no client-side Supabase writes/read for admin paths).
-  - [ ] 2.4 Create minimal data access helpers in `lib/db/products.ts` (getForSale, getAll, create, update, delete, markSold).
+  - [x] 2.4 Create minimal data access helpers in `lib/db/products.ts` (getForSale, getAll, create, update, delete, markSold).
   - [ ] 2.5 Seed one example product (optional) for local testing.
 
 - [ ] 3.0 Implement admin authentication and product management UI
-  - [ ] 3.1 Create `lib/auth/session.ts` with helpers to set/get/clear an HTTP-only, Secure, signed cookie (e.g., HMAC using a secret or rely on a random token stored in-memory for dev; MVP can store a signed flag only).
-  - [ ] 3.2 Create `app/api/admin/login/route.ts` that validates the submitted password against `ADMIN_PASSWORD` and sets the cookie.
-  - [ ] 3.3 Create `app/api/admin/logout/route.ts` to clear the cookie.
-  - [ ] 3.4 Add `middleware.ts` to protect `/admin` and `/api/admin/*` by checking the session cookie; redirect to `/admin` login view if missing.
-  - [ ] 3.5 Implement `app/admin/page.tsx`:
+  - [x] 3.1 Create `lib/auth/session.ts` with helpers to set/get/clear an HTTP-only, Secure, signed cookie (e.g., HMAC using a secret or rely on a random token stored in-memory for dev; MVP can store a signed flag only).
+  - [x] 3.2 Create `app/api/admin/login/route.ts` that validates the submitted password against `ADMIN_PASSWORD` and sets the cookie.
+  - [x] 3.3 Create `app/api/admin/logout/route.ts` to clear the cookie.
+  - [x] 3.4 Add `middleware.ts` to protect `/admin` and `/api/admin/*` by checking the session cookie; redirect to `/admin` login view if missing.
+  - [x] 3.5 Implement `app/admin/page.tsx`:
     - [ ] 3.5.1 If not authenticated: render password form that POSTs to `/api/admin/login`.
     - [ ] 3.5.2 If authenticated: render dashboard with product list and create/edit form.
-  - [ ] 3.6 Build `components/admin/product-form.tsx` with fields: Name, Dimensions (W×H), Type, Price (GBP), Notes, and Image Path selector.
-  - [ ] 3.7 Implement image selector: `lib/gallery-assets.ts` lists files under `public/images/gallery/desktop/*.webp`; UI allows picking one and stores its path.
-  - [ ] 3.8 Create admin APIs:
-    - [ ] 3.8.1 `app/api/admin/products/route.ts` (GET list, POST create).
-    - [ ] 3.8.2 `app/api/admin/products/[id]/route.ts` (PATCH update, DELETE remove, POST `mark-sold` optional or within PATCH).
+  - [x] 3.6 Build `components/admin/product-form.tsx` with fields: Name, Dimensions (W×H), Type, Price (GBP), Notes, and Image Path selector.
+  - [x] 3.7 Implement image selector: `lib/gallery-assets.ts` lists files under `public/images/gallery/desktop/*.webp`; UI allows picking one and stores its path.
+  - [x] 3.8 Create admin APIs:
+    - [x] 3.8.1 `app/api/admin/products/route.ts` (GET list, POST create).
+    - [x] 3.8.2 `app/api/admin/products/[id]/route.ts` (PATCH update, DELETE remove, POST `mark-sold` optional or within PATCH).
   - [ ] 3.9 Validate inputs server-side; coerce price to pennies; compute `dimensions_label` from W×H inputs.
 
 - [ ] 4.0 Build `/shop` page with SSR, responsive images, and sold state
-  - [ ] 4.1 Implement `components/product-card.tsx` displaying image (responsive `<picture>`), name, dimensions/type, formatted price, Buy button.
-  - [ ] 4.2 Server-render `app/shop/page.tsx` loading `is_for_sale` products; include `Sold` overlay and disabled Buy when `is_sold`.
-  - [ ] 4.3 Add success/canceled banners based on URL params; clearable by user.
-  - [ ] 4.4 Format prices as GBP (e.g., `£1,200`).
+  - [x] 4.1 Implement `components/product-card.tsx` displaying image (responsive `<picture>`), name, dimensions/type, formatted price, Buy button.
+  - [x] 4.2 Server-render `app/shop/page.tsx` loading `is_for_sale` products; include `Sold` overlay and disabled Buy when `is_sold`.
+  - [x] 4.3 Add success/canceled banners based on URL params; clearable by user.
+  - [x] 4.4 Format prices as GBP (e.g., `£1,200`).
   - [ ] 4.5 Basic empty/error states for data loading.
 
 - [ ] 5.0 Integrate Stripe Checkout and webhook to mark items as sold
-  - [ ] 5.1 Add `lib/stripe.ts` to initialize Stripe with `STRIPE_SECRET_KEY`.
-  - [ ] 5.2 Implement `app/api/checkout/route.ts`:
+  - [x] 5.1 Add `lib/stripe.ts` to initialize Stripe with `STRIPE_SECRET_KEY`.
+  - [x] 5.2 Implement `app/api/checkout/route.ts`:
     - [ ] 5.2.1 Validate product id; reject if not for sale or already sold.
     - [ ] 5.2.2 Create Checkout Session with `price_data` (GBP), quantity 1; set `success_url` `/shop?success=1&session_id={CHECKOUT_SESSION_ID}` and `cancel_url` `/shop?canceled=1`.
     - [ ] 5.2.3 Include `product_id` in `metadata` for webhook correlation.
     - [ ] 5.2.4 Return the session URL; client redirects.
-  - [ ] 5.3 Implement `app/api/stripe/webhook/route.ts` verifying signature with `STRIPE_WEBHOOK_SECRET`.
-  - [ ] 5.4 On `checkout.session.completed`, read `metadata.product_id`, update DB: set `is_sold=true`, `is_for_sale=false`.
+  - [x] 5.3 Implement `app/api/stripe/webhook/route.ts` verifying signature with `STRIPE_WEBHOOK_SECRET`.
+  - [x] 5.4 On `checkout.session.completed`, read `metadata.product_id`, update DB: set `is_sold=true`, `is_for_sale=false`.
   - [ ] 5.5 Idempotency: guard against duplicate events (e.g., store processed event id or rely on UPSERT semantics).
   - [ ] 5.6 Manual QA: create product, buy via Stripe test mode, confirm webhook marks item sold.
 
