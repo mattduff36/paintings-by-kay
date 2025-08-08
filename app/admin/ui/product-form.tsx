@@ -73,12 +73,43 @@ export function ProductForm() {
         <input className="rounded border p-2" placeholder="Width (cm)" value={state.width} onChange={(e) => set('width', e.target.value)} />
         <input className="rounded border p-2" placeholder="Height (cm)" value={state.height} onChange={(e) => set('height', e.target.value)} />
         <input className="rounded border p-2" placeholder="Price (GBP)" value={state.price} onChange={(e) => set('price', e.target.value)} />
-        <select className="rounded border p-2" value={state.image_path} onChange={(e) => set('image_path', e.target.value)}>
-          <option value="">Select image</option>
-          {assets.map((a) => (
-            <option key={a} value={a}>{a}</option>
-          ))}
-        </select>
+        <div className="sm:col-span-2">
+          <p className="mb-2 text-sm font-medium">Select image</p>
+          <div className="max-h-80 overflow-auto rounded border p-2">
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+              {assets.map((desktopSrc) => {
+                const isSelected = state.image_path === desktopSrc;
+                const thumbSrc = desktopSrc.replace('/desktop/', '/mobile/');
+                return (
+                  <button
+                    key={desktopSrc}
+                    type="button"
+                    onClick={() => set('image_path', desktopSrc)}
+                    aria-pressed={isSelected}
+                    className={`relative rounded outline-none transition focus:ring-2 focus:ring-blue-500 ${
+                      isSelected ? 'ring-2 ring-[var(--primary-color)]' : 'ring-1 ring-transparent'
+                    }`}
+                    title={desktopSrc.split('/').pop() || 'image'}
+                  >
+                    <img
+                      src={thumbSrc}
+                      alt={desktopSrc.split('/').pop() || 'gallery image'}
+                      loading="lazy"
+                      className="h-20 w-full rounded object-cover"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="mt-2 text-sm text-gray-700">
+            {state.image_path ? (
+              <span>Selected: <code>{state.image_path.split('/').pop()}</code></span>
+            ) : (
+              <span className="text-gray-500">No image selected</span>
+            )}
+          </div>
+        </div>
         <textarea className="rounded border p-2 sm:col-span-2" placeholder="Notes (optional)" value={state.notes} onChange={(e) => set('notes', e.target.value)} />
       </div>
       <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={state.is_for_sale} onChange={(e) => set('is_for_sale', e.target.checked)} /> For sale</label>
