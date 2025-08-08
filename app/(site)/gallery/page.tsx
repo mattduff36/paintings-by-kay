@@ -5,7 +5,6 @@ export default function GalleryPage() {
   return (
     <main id="top">
       {/* Client script to enable fullscreen behavior */}
-      {/* @ts-expect-error Server Components can include client children */}
       <FullscreenMount />
       <h1 className="gallery-title">Gallery</h1>
       <p className="gallery-note">All paintings are available for purchase. If you're interested in buying any of these pieces, please get in touch.</p>
