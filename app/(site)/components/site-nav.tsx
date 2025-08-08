@@ -5,7 +5,7 @@ export function SiteNav() {
     <nav className="mx-auto flex max-w-6xl items-center justify-between p-4">
       <div className="logo">
         <Link href="/">
-          <img src="/images/logos/logo-transparent.png" alt="Paintings by Kay Logo" className="h-12 w-auto" />
+          <img src="/images/logos/logo-transparent.webp" alt="Paintings by Kay Logo" className="h-12 w-auto" />
         </Link>
       </div>
       <ul className="flex list-none gap-6">

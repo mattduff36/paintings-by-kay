@@ -7,7 +7,6 @@ function GalleryGrid() {
           <picture>
             <source media="(max-width: 768px)" srcSet={`/images/gallery/mobile/gallery${n}.webp`} type="image/webp" />
             <source media="(max-width: 1024px)" srcSet={`/images/gallery/tablet/gallery${n}.webp`} type="image/webp" />
-            <source srcSet={`/images/gallery/desktop/gallery${n}.webp`} type="image/webp" />
             <img
               src={`/images/gallery/desktop/gallery${n}.webp`}
               alt={`Original canvas painting by Kay - gallery ${n}`}

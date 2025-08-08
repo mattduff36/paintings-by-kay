@@ -3,7 +3,7 @@ export default function HomePage() {
     <section className="mx-auto max-w-6xl">
       <div className="text-center">
         <img
-          src="/images/logos/logo-transparent.png"
+          src="/images/logos/logo-transparent.webp"
           alt="Paintings by Kay Logo"
           className="mx-auto mb-4 h-auto max-w-md drop-shadow"
         />
