@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import { AdminNavButtons } from '@/app/admin/ui/admin-nav-buttons';
 
-export function SiteNav() {
+export function SiteNav({ showAdminActions = false }: { showAdminActions?: boolean }) {
   return (
     <nav>
       <div className="logo">
@@ -14,6 +15,7 @@ export function SiteNav() {
         <li><Link href="/#about">About</Link></li>
         <li><Link href="/#contact">Contact</Link></li>
         <li><Link href="/shop">Shop</Link></li>
+        {showAdminActions ? <AdminNavButtons /> : null}
       </ul>
     </nav>
   );

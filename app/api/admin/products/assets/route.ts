@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { listDesktopGalleryAssets } from '@/lib/gallery-assets';
+import { listAdminImageMappings } from '@/lib/gallery-assets';
 
 export async function GET() {
-  const assets = listDesktopGalleryAssets();
-  return NextResponse.json({ assets });
+  const items = listAdminImageMappings();
+  return NextResponse.json({ items });
 }
 
 

@@ -40,7 +40,7 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-        <p className="gallery-note">All paintings are available for purchase. If you're interested in buying any of these pieces, please get in touch.</p>
+        <p className="gallery-note">Selected pictures are available for purchase. Please visit our <a className="inline-link" href="/shop">shop</a> to see the pieces currently available. All with free UK delivery.</p>
         <div className="view-all">
           <a href="/gallery" className="view-all-button">View All Paintings</a>
         </div>

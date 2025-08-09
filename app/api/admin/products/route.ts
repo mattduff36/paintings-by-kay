@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     dimensions_h_cm: h,
     dimensions_label: `${w}×${h} cm`,
     price_gbp_pennies: price,
-    notes: body?.notes ?? null,
+    notes: null,
     image_path,
     is_for_sale: Boolean(body?.is_for_sale ?? false),
   } as any;

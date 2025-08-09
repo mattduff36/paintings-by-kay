@@ -172,6 +172,19 @@ section {
 }
 
 /* Full screen overlay */
+
+.gallery-badge-sale {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #0f5132; /* dark green for subtle */
+    border: 1px solid #c3e6cb;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 .fullscreen-overlay {
     display: none;
     position: fixed;
@@ -302,6 +315,17 @@ footer {
     padding: 2rem;
     background-color: white;
     color: var(--text-color);
+}
+
+/* Inline link styling for body text */
+.inline-link {
+    text-decoration: underline;
+    color: var(--text-color);
+    transition: color 0.2s ease;
+}
+
+.inline-link:hover {
+    color: var(--primary-color);
 }
 
 .gallery-note {

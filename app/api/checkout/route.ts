@@ -14,6 +14,21 @@ export async function POST(request: Request) {
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     payment_method_types: ['card'],
+    billing_address_collection: 'required',
+    phone_number_collection: { enabled: true },
+    shipping_address_collection: { allowed_countries: ['GB'] },
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 0, currency: 'gbp' },
+          display_name: 'Free UK postage & packaging',
+        },
+      },
+    ],
+    custom_text: {
+      shipping_address: { message: 'We ship to UK addresses only. Free postage & packaging within the UK.' },
+    },
     line_items: [
       {
         price_data: {

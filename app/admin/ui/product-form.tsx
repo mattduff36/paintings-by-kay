@@ -7,13 +7,12 @@ interface FormState {
   height: string;
   type: string;
   price: string;
-  notes: string;
   image_path: string;
   is_for_sale: boolean;
 }
 
 export function ProductForm() {
-  const [assets, setAssets] = useState<string[]>([]);
+  const [assets, setAssets] = useState<{ index: number; galleryDesktopPath: string; displayPath: string; adminThumbPath: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [state, setState] = useState<FormState>({
@@ -22,13 +21,14 @@ export function ProductForm() {
     height: '',
     type: '',
     price: '',
-    notes: '',
     image_path: '',
-    is_for_sale: true,
+    is_for_sale: false,
   });
 
   useEffect(() => {
-    fetch('/api/admin/products/assets').then(async (r) => setAssets((await r.json())?.assets || [])).catch(() => setAssets([]));
+    fetch('/api/admin/products/assets')
+      .then(async (r) => setAssets((await r.json())?.items || []))
+      .catch(() => setAssets([]));
   }, []);
 
   function set<K extends keyof FormState>(key: K, val: FormState[K]) {
@@ -52,7 +52,6 @@ export function ProductForm() {
         dimensions_label: `${width}×${height} cm`,
         type: state.type,
         price_gbp_pennies: pennies,
-        notes: state.notes || null,
         image_path: state.image_path,
         is_for_sale: state.is_for_sale,
       }),
@@ -77,23 +76,23 @@ export function ProductForm() {
           <p className="mb-2 text-sm font-medium">Select image</p>
           <div className="max-h-80 overflow-auto rounded border p-2">
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
-              {assets.map((desktopSrc) => {
-                const isSelected = state.image_path === desktopSrc;
-                const thumbSrc = desktopSrc.replace('/desktop/', '/mobile/');
+              {assets.map((item) => {
+                const isSelected = state.image_path === item.galleryDesktopPath;
+                const thumbSrc = item.adminThumbPath;
                 return (
                   <button
-                    key={desktopSrc}
+                    key={item.galleryDesktopPath}
                     type="button"
-                    onClick={() => set('image_path', desktopSrc)}
+                    onClick={() => set('image_path', item.galleryDesktopPath)}
                     aria-pressed={isSelected}
                     className={`relative rounded outline-none transition focus:ring-2 focus:ring-blue-500 ${
                       isSelected ? 'ring-2 ring-[var(--primary-color)]' : 'ring-1 ring-transparent'
                     }`}
-                    title={desktopSrc.split('/').pop() || 'image'}
+                    title={item.galleryDesktopPath.split('/').pop() || 'image'}
                   >
                     <img
                       src={thumbSrc}
-                      alt={desktopSrc.split('/').pop() || 'gallery image'}
+                      alt={item.galleryDesktopPath.split('/').pop() || 'gallery image'}
                       loading="lazy"
                       className="h-20 w-full rounded object-cover"
                     />
@@ -110,7 +109,6 @@ export function ProductForm() {
             )}
           </div>
         </div>
-        <textarea className="rounded border p-2 sm:col-span-2" placeholder="Notes (optional)" value={state.notes} onChange={(e) => set('notes', e.target.value)} />
       </div>
       <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={state.is_for_sale} onChange={(e) => set('is_for_sale', e.target.checked)} /> For sale</label>
       {error && <p className="text-sm text-red-600">{error}</p>}

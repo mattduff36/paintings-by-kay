@@ -8,6 +8,7 @@ export default async function ShopPage({ searchParams }: { searchParams?: { succ
   return (
     <section className="mx-auto max-w-7xl">
       <h1 className="mb-6 text-center text-3xl font-medium text-[var(--primary-color)]">Shop</h1>
+      <p className="mb-4 text-center text-sm text-gray-700">Free postage and packaging to UK addresses only. We do not ship overseas.</p>
       {success && <p className="mb-4 rounded bg-green-100 p-3 text-green-700">Thank you for your purchase!</p>}
       {canceled && <p className="mb-4 rounded bg-yellow-100 p-3 text-yellow-700">Checkout canceled.</p>}
       {products.length === 0 ? (

@@ -11,6 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
         <source media="(max-width: 1024px)" srcSet={product.image_path.replace('/desktop/', '/tablet/')} />
         <img src={product.image_path} alt={product.name} />
       </picture>
+      <div className="absolute right-2 top-2 rounded bg-white/80 px-2 py-1 text-[10px] font-medium text-gray-800">Free UK P&P</div>
       {product.is_sold && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-2xl font-semibold text-white">Sold</div>
       )}
