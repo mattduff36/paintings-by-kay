@@ -154,7 +154,69 @@ export function AdminTable({ products }: { products: Product[] }) {
   return (
     <div className="space-y-3">
       <h2 className="text-xl">Products</h2>
-      <div className="overflow-x-auto rounded border">
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-3">
+        {rows.map((row, idx) => {
+          const asset = assets[idx];
+          return (
+            <div key={asset?.galleryDesktopPath || idx} className="rounded border p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <label className="flex items-center gap-2 text-sm whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={row.is_for_sale}
+                    onChange={(e) => updateRow(idx, { is_for_sale: e.target.checked })}
+                  />
+                  For sale
+                </label>
+                {asset ? (
+                  <img src={asset.adminThumbPath} alt={asset.galleryDesktopPath.split('/').pop() || 'image'} className="h-16 w-16 rounded object-cover" />
+                ) : null}
+              </div>
+              <div className="space-y-2">
+                <input
+                  className="w-full rounded border p-2"
+                  placeholder="Name"
+                  value={row.name}
+                  onChange={(e) => updateRow(idx, { name: e.target.value })}
+                />
+                <input
+                  className="w-full rounded border p-2"
+                  placeholder="Type (e.g., Acrylic on canvas)"
+                  value={row.type}
+                  onChange={(e) => updateRow(idx, { type: e.target.value })}
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className="w-full rounded border p-2"
+                    placeholder="Width (cm)"
+                    value={row.width}
+                    onChange={(e) => updateRow(idx, { width: e.target.value })}
+                  />
+                  <input
+                    className="w-full rounded border p-2"
+                    placeholder="Height (cm)"
+                    value={row.height}
+                    onChange={(e) => updateRow(idx, { height: e.target.value })}
+                  />
+                </div>
+                <input
+                  className="w-full rounded border p-2"
+                  placeholder="Price (GBP)"
+                  value={row.price}
+                  onChange={(e) => updateRow(idx, { price: e.target.value })}
+                />
+                {row.error && (row.id || row.is_for_sale) ? (
+                  <div className="pt-1 text-xs text-red-600">{row.error}</div>
+                ) : null}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block overflow-x-auto rounded border">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-left">
             <tr>
