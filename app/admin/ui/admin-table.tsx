@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from 'react';
 import type { Product } from '@/lib/types/product';
+import { TripleToggle, type StatusValue } from './triple-toggle';
 
 interface AdminAssetItem {
   index: number;
@@ -12,6 +13,7 @@ interface AdminAssetItem {
 interface RowState {
   id: string | null; // null means not yet created
   is_for_sale: boolean;
+  is_sold: boolean;
   image_path: string | null; // selected gallery desktop path
   name: string;
   type: string;
@@ -46,6 +48,7 @@ export function AdminTable({ products }: { products: Product[] }) {
           return {
             id: existing?.id ?? null,
             is_for_sale: existing?.is_for_sale ?? false,
+            is_sold: existing?.is_sold ?? false,
             image_path: item.galleryDesktopPath,
             name: existing?.name ?? '',
             type: existing?.type ?? '',
@@ -88,7 +91,7 @@ export function AdminTable({ products }: { products: Product[] }) {
       const height = Number.parseInt(row.height || '0', 10);
       const pennies = Math.round(Number.parseFloat(row.price || '0') * 100);
       const dimsLabel = Number.isFinite(width) && Number.isFinite(height) ? `${width}×${height} cm` : '';
-      const payload = {
+      const payload: any = {
         name: row.name,
         type: row.type,
         dimensions_w_cm: width,
@@ -97,6 +100,7 @@ export function AdminTable({ products }: { products: Product[] }) {
         price_gbp_pennies: pennies,
         image_path: row.image_path,
         is_for_sale: row.is_for_sale,
+        is_sold: row.is_sold,
       };
       let ok = false;
       if (row.id) {
@@ -161,14 +165,14 @@ export function AdminTable({ products }: { products: Product[] }) {
           return (
             <div key={asset?.galleryDesktopPath || idx} className="rounded border p-3">
               <div className="mb-2 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-sm whitespace-nowrap">
-                  <input
-                    type="checkbox"
-                    checked={row.is_for_sale}
-                    onChange={(e) => updateRow(idx, { is_for_sale: e.target.checked })}
-                  />
-                  For sale
-                </label>
+                <TripleToggle
+                  value={row.is_sold ? 'sold' : row.is_for_sale ? 'for_sale' : 'unlisted'}
+                  onChange={(next: StatusValue) => {
+                    if (next === 'sold') updateRow(idx, { is_sold: true, is_for_sale: false });
+                    else if (next === 'for_sale') updateRow(idx, { is_sold: false, is_for_sale: true });
+                    else updateRow(idx, { is_sold: false, is_for_sale: false });
+                  }}
+                />
                 {asset ? (
                   <img src={asset.adminThumbPath} alt={asset.galleryDesktopPath.split('/').pop() || 'image'} className="h-16 w-16 rounded object-cover" />
                 ) : null}
@@ -220,7 +224,7 @@ export function AdminTable({ products }: { products: Product[] }) {
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-left">
             <tr>
-              <th className="p-2">For sale</th>
+              <th className="p-2">Status</th>
               <th className="p-2">Image</th>
               <th className="p-2">Name</th>
               <th className="p-2">Type</th>
@@ -236,10 +240,13 @@ export function AdminTable({ products }: { products: Product[] }) {
               return (
                 <tr key={asset?.galleryDesktopPath || idx} className="border-t align-middle">
                   <td className="p-2">
-                    <input
-                      type="checkbox"
-                      checked={row.is_for_sale}
-                      onChange={(e) => updateRow(idx, { is_for_sale: e.target.checked })}
+                    <TripleToggle
+                      value={row.is_sold ? 'sold' : row.is_for_sale ? 'for_sale' : 'unlisted'}
+                      onChange={(next: StatusValue) => {
+                        if (next === 'sold') updateRow(idx, { is_sold: true, is_for_sale: false });
+                        else if (next === 'for_sale') updateRow(idx, { is_sold: false, is_for_sale: true });
+                        else updateRow(idx, { is_sold: false, is_for_sale: false });
+                      }}
                     />
                   </td>
                   <td className="p-2">

@@ -196,6 +196,17 @@ section {
     border-radius: 4px;
 }
 
+.gallery-badge-sold {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 .fullscreen-overlay {
     display: none;
     position: fixed;
@@ -435,3 +446,38 @@ button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 } 
+
+/* Triple toggle styling */
+.triple-toggle {
+    display: inline-flex;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #fff;
+}
+.triple-toggle.is-disabled { opacity: 0.6; }
+.triple-segment {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 12px;
+    padding: 6px 10px;
+    border: 0;
+    background: transparent;
+    color: var(--text-color);
+}
+.triple-segment + .triple-segment {
+    border-left: 1px solid #eee;
+}
+.triple-segment.is-active {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Specific active colors */
+.triple-segment.seg-for-sale.is-active {
+    background: #d1f4df; /* faded green */
+    color: #0f5132;
+}
+.triple-segment.seg-sold.is-active {
+    background: #f8d7da; /* faded red */
+    color: #842029;
+}

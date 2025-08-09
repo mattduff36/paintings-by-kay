@@ -1,15 +1,18 @@
 import dynamic from 'next/dynamic';
-import { getProductsForSale } from '@/lib/db/products';
+import { getAllProducts } from '@/lib/db/products';
 // Use absolute import to avoid any dev-time chunk resolution issues
 const FullscreenMount = dynamic(() => import('@/app/(site)/gallery/FullscreenMount'), { ssr: false });
 export default async function GalleryPage() {
   const images = Array.from({ length: 40 }).map((_, i) => i + 1);
-  const products = await getProductsForSale().catch(() => []);
+  const products = await getAllProducts().catch(() => []);
   const saleSet = new Set<number>();
+  const soldSet = new Set<number>();
   for (const p of products) {
     const id = p.image_path.match(/gallery\/(?:desktop|mobile|tablet)\/gallery(\d+)\./i)?.[1];
     const num = id ? Number.parseInt(id, 10) : NaN;
-    if (Number.isFinite(num) && p.is_for_sale && !p.is_sold) saleSet.add(num);
+    if (!Number.isFinite(num)) continue;
+    if (p.is_sold) soldSet.add(num);
+    else if (p.is_for_sale) saleSet.add(num);
   }
   return (
     <main id="top">
@@ -25,7 +28,11 @@ export default async function GalleryPage() {
               <source media="(max-width: 1024px)" srcSet={`/images/gallery/tablet/gallery${n}.webp`} type="image/webp" />
               <img src={`/images/gallery/desktop/gallery${n}.webp`} alt={`Original canvas painting by Kay - gallery ${n}`} loading="lazy" />
             </picture>
-            {saleSet.has(n) ? <div className="gallery-badge-sale">For sale</div> : null}
+            {soldSet.has(n) ? (
+              <div className="gallery-badge-sold">Sold</div>
+            ) : saleSet.has(n) ? (
+              <div className="gallery-badge-sale">For sale</div>
+            ) : null}
           </div>
         ))}
       </div>
