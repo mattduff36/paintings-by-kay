@@ -21,7 +21,7 @@ export default async function GalleryPage() {
       {/* Client script to enable fullscreen behavior */}
       <FullscreenMount />
       <h1 className="gallery-title">Gallery</h1>
-      <p className="gallery-note">All paintings are available for purchase. If you're interested in buying any of these pieces, please get in touch.</p>
+      <p className="gallery-note">Selected pictures are available for purchase. Please visit our shop to see the pieces currently available. All with free UK delivery.</p>
       <div className="gallery-grid" id="fullGallery">
         {images.map((n) => (
           <div key={n} className="gallery-item">
