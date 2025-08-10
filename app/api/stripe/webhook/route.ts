@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
-import { markSold } from '@/lib/db/products';
+import { getProductById, markSold } from '@/lib/db/products';
+import { revalidatePath } from 'next/cache';
+import { sendPurchaseConfirmationEmail } from '@/lib/email';
+import type Stripe from 'stripe';
 
 export const runtime = 'nodejs';
 
@@ -16,11 +19,32 @@ export async function POST(request: Request) {
   } catch (err) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as any;
-    const productId = session?.metadata?.product_id as string | undefined;
+  const isCheckoutSuccess =
+    event.type === 'checkout.session.completed' ||
+    event.type === 'checkout.session.async_payment_succeeded';
+
+  if (isCheckoutSuccess) {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const productId = (session.metadata?.product_id as string | undefined) || undefined;
     if (productId) {
-      await markSold(productId).catch(() => {});
+      const updated = await markSold(productId).catch(() => false);
+      if (updated) {
+        const product = await getProductById(productId).catch(() => null);
+        const customerEmail = session.customer_details?.email || session.customer_email || '';
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'http://localhost:3000';
+        if (product && customerEmail) {
+          await sendPurchaseConfirmationEmail({
+            toEmail: customerEmail,
+            product,
+            session,
+            siteUrl,
+          }).catch(() => {});
+        }
+        try {
+          revalidatePath('/gallery');
+          revalidatePath('/');
+        } catch {}
+      }
     }
   }
   return NextResponse.json({ received: true });

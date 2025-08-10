@@ -1,7 +1,9 @@
-import dynamic from 'next/dynamic';
+import NextDynamic from 'next/dynamic';
 import { getAllProducts } from '@/lib/db/products';
+
+export const dynamic = 'force-dynamic';
 // Use absolute import to avoid any dev-time chunk resolution issues
-const FullscreenMount = dynamic(() => import('@/app/(site)/gallery/FullscreenMount'), { ssr: false });
+const FullscreenMount = NextDynamic(() => import('@/app/(site)/gallery/FullscreenMount'), { ssr: false });
 export default async function GalleryPage() {
   const images = Array.from({ length: 40 }).map((_, i) => i + 1);
   const products = await getAllProducts().catch(() => []);

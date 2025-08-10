@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { createProduct, getAllProducts } from '@/lib/db/products';
 
 export async function GET() {
@@ -34,6 +35,10 @@ export async function POST(request: Request) {
     return null;
   });
   if (!created) return NextResponse.json({ error: 'Failed to create' }, { status: 400 });
+  try {
+    revalidatePath('/gallery');
+    revalidatePath('/');
+  } catch {}
   return NextResponse.json({ item: created });
 }
 

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { deleteProduct, updateProduct } from '@/lib/db/products';
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
@@ -18,6 +19,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (typeof body?.is_sold === 'boolean') updates.is_sold = body.is_sold;
   const updated = await updateProduct(params.id, updates as any).catch(() => null);
   if (!updated) return NextResponse.json({ error: 'Failed to update' }, { status: 400 });
+  try {
+    revalidatePath('/gallery');
+    revalidatePath('/');
+  } catch {}
   return NextResponse.json({ item: updated });
 }
 

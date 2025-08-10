@@ -79,12 +79,13 @@ export async function deleteProduct(id: string): Promise<void> {
   await pgQuery(`delete from products where id = $1`, [id]);
 }
 
-export async function markSold(id: string): Promise<void> {
+export async function markSold(id: string): Promise<boolean> {
   await ensureProductsTable();
-  await pgQuery(
-    `update products set is_sold = true, is_for_sale = false, updated_at = now() where id = $1`,
+  const { rows } = await pgQuery<Product>(
+    `update products set is_sold = true, is_for_sale = false, updated_at = now() where id = $1 and is_sold = false returning *`,
     [id],
   );
+  return rows.length > 0;
 }
 
 
