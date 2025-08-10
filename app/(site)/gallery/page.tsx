@@ -1,5 +1,6 @@
 import NextDynamic from 'next/dynamic';
 import { getAllProducts } from '@/lib/db/products';
+import { listAdminImageMappings } from '@/lib/gallery-assets';
 
 export const dynamic = 'force-dynamic';
 // Use absolute import to avoid any dev-time chunk resolution issues
@@ -7,6 +8,11 @@ const FullscreenMount = NextDynamic(() => import('@/app/(site)/gallery/Fullscree
 export default async function GalleryPage() {
   const images = Array.from({ length: 40 }).map((_, i) => i + 1);
   const products = await getAllProducts().catch(() => []);
+  const mappings = listAdminImageMappings();
+  const frontByIndex = new Map<number, string>();
+  mappings.forEach((m) => {
+    frontByIndex.set(m.index, m.adminThumbPath);
+  });
   const saleSet = new Set<number>();
   const soldSet = new Set<number>();
   for (const p of products) {
@@ -23,20 +29,28 @@ export default async function GalleryPage() {
       <h1 className="gallery-title">Gallery</h1>
       <p className="gallery-note">Selected pictures are available for purchase. Please visit our shop to see the pieces currently available. All with free UK delivery.</p>
       <div className="gallery-grid" id="fullGallery">
-        {images.map((n) => (
-          <div key={n} className="gallery-item">
-            <picture>
-              <source media="(max-width: 768px)" srcSet={`/images/gallery/mobile/gallery${n}.webp`} type="image/webp" />
-              <source media="(max-width: 1024px)" srcSet={`/images/gallery/tablet/gallery${n}.webp`} type="image/webp" />
-              <img src={`/images/gallery/desktop/gallery${n}.webp`} alt={`Original canvas painting by Kay - gallery ${n}`} loading="lazy" />
-            </picture>
-            {soldSet.has(n) ? (
-              <div className="gallery-badge-sold">Sold</div>
-            ) : saleSet.has(n) ? (
-              <div className="gallery-badge-sale">For sale</div>
-            ) : null}
-          </div>
-        ))}
+        {images.map((n) => {
+          const frontSrc = frontByIndex.get(n) || '';
+          return (
+            <div key={n} className="gallery-item">
+              <picture>
+                <source media="(max-width: 768px)" srcSet={`/images/gallery/mobile/gallery${n}.webp`} type="image/webp" />
+                <source media="(max-width: 1024px)" srcSet={`/images/gallery/tablet/gallery${n}.webp`} type="image/webp" />
+                <img
+                  src={`/images/gallery/desktop/gallery${n}.webp`}
+                  alt={`Original canvas painting by Kay - gallery ${n}`}
+                  loading="lazy"
+                  data-front-src={frontSrc}
+                />
+              </picture>
+              {soldSet.has(n) ? (
+                <div className="gallery-badge-sold">Sold</div>
+              ) : saleSet.has(n) ? (
+                <div className="gallery-badge-sale">For sale</div>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
 
       <div className="fullscreen-overlay">
