@@ -80,11 +80,34 @@ export function AdminTable({ products }: { products: Product[] }) {
     }
   }
 
-  async function saveRow(idx: number) {
+  function missingFieldsMessage(row: RowState): string | null {
+    if (!row.is_for_sale) return null;
+    const missing: string[] = [];
+    if (!row.name.trim()) missing.push('name');
+    if (!row.type.trim()) missing.push('type');
+    const w = Number.parseInt(row.width || '0', 10);
+    const h = Number.parseInt(row.height || '0', 10);
+    if (!Number.isFinite(w) || w <= 0) missing.push('width');
+    if (!Number.isFinite(h) || h <= 0) missing.push('height');
+    const priceNum = Number.parseFloat(row.price || '0');
+    if (!Number.isFinite(priceNum) || priceNum <= 0) missing.push('price');
+    if (!row.image_path) missing.push('image');
+    if (missing.length > 0) {
+      return `All fields are required to set status to "For sale" (missing: ${missing.join(', ')})`;
+    }
+    return null;
+  }
+
+  async function saveRow(idx: number): Promise<boolean> {
     const row = rows[idx];
     // Skip rows that are neither existing products nor selected for sale
-    if (!row.id && !row.is_for_sale) return;
-    if (!row.image_path) return;
+    if (!row.id && !row.is_for_sale) return true;
+    if (!row.image_path) return false;
+    const validationMsg = missingFieldsMessage(row);
+    if (validationMsg) {
+      updateRow(idx, { error: validationMsg });
+      return false;
+    }
     updateRow(idx, { busy: true, error: null });
     try {
       const width = Number.parseInt(row.width || '0', 10);
@@ -128,8 +151,10 @@ export function AdminTable({ products }: { products: Product[] }) {
         }
       }
       if (!ok) updateRow(idx, { error: 'Save failed' });
+      return ok;
     } catch (_e) {
       updateRow(idx, { error: 'Save error' });
+      return false;
     } finally {
       updateRow(idx, { busy: false });
     }
@@ -142,13 +167,13 @@ export function AdminTable({ products }: { products: Product[] }) {
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       if (row.id || row.is_for_sale) {
-        await saveRow(i);
-        // capture error state after each save attempt
-        const current = rows[i];
-        if (current?.error) hadErrors = true;
+        const ok = await saveRow(i);
+        if (!ok) hadErrors = true;
       }
     }
     setSaving(false);
+    // Always notify that saving finished so the header button can exit the "Saving…" state
+    window.dispatchEvent(new CustomEvent('admin:done'));
     if (!hadErrors) {
       setDirty(false);
       window.dispatchEvent(new CustomEvent('admin:clean'));
