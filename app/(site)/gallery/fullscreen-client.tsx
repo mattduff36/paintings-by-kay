@@ -17,7 +17,7 @@ export function FullscreenClient() {
 
     function applyTransform() {
       if (!fullscreenImage) return;
-      fullscreenImage.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+      fullscreenImage.style.transform = `translate(-50%, -50%) translate(${originX}px, ${originY}px) scale(${scale})`;
       fullscreenImage.style.transformOrigin = 'center center';
       fullscreenImage.style.willChange = 'transform';
       fullscreenImage.style.cursor = scale > 1 ? (isPanning ? 'grabbing' : 'grab') : 'zoom-in';

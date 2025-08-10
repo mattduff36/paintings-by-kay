@@ -20,7 +20,10 @@ export function SiteNav({ showAdminActions = false }: { showAdminActions?: boole
         </Link>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <ul className={`nav-links ${open ? 'open' : ''}`}>
+        <ul className={`nav-links ${open ? 'open' : ''}`} onClick={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.tagName === 'A') setOpen(false);
+        }}>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/gallery">Gallery</Link></li>
           <li><Link href="/#about">About</Link></li>
