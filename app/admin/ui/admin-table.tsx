@@ -81,7 +81,7 @@ export function AdminTable({ products }: { products: Product[] }) {
   }
 
   function missingFieldsMessage(row: RowState): string | null {
-    if (!row.is_for_sale) return null;
+    if (!row.is_for_sale && !row.is_sold) return null;
     const missing: string[] = [];
     if (!row.name.trim()) missing.push('name');
     if (!row.type.trim()) missing.push('type');
@@ -93,7 +93,8 @@ export function AdminTable({ products }: { products: Product[] }) {
     if (!Number.isFinite(priceNum) || priceNum <= 0) missing.push('price');
     if (!row.image_path) missing.push('image');
     if (missing.length > 0) {
-      return `All fields are required to set status to "For sale" (missing: ${missing.join(', ')})`;
+      const label = row.is_sold ? 'Sold' : 'For sale';
+      return `All fields are required to set status to "${label}" (missing: ${missing.join(', ')})`;
     }
     return null;
   }
