@@ -1,12 +1,13 @@
 import NextDynamic from 'next/dynamic';
 import { getAllProducts } from '@/lib/db/products';
-import { listAdminImageMappings } from '@/lib/gallery-assets';
+import { listAdminImageMappings, listDesktopGalleryAssets } from '@/lib/gallery-assets';
 
 export const dynamic = 'force-dynamic';
 // Use absolute import to avoid any dev-time chunk resolution issues
 const FullscreenMount = NextDynamic(() => import('@/app/(site)/gallery/FullscreenMount'), { ssr: false });
 export default async function GalleryPage() {
-  const images = Array.from({ length: 40 }).map((_, i) => i + 1);
+  const desktopAssets = listDesktopGalleryAssets();
+  const images = Array.from({ length: desktopAssets.length }).map((_, i) => i + 1);
   const products = await getAllProducts().catch(() => []);
   const mappings = listAdminImageMappings();
   const frontByIndex = new Map<number, string>();
