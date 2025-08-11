@@ -23,7 +23,7 @@ export default function HomePage() {
           <div className="about-text">
             <h2>Hi, I'm Kay</h2>
             <p>I started painting in 2013 after being inspired by watching Bob Ross. What began as a bit of fun quickly became a much-loved hobby and a way for me to relax and express my creativity.</p>
-            <p>I specialize in nature-inspired artwork — from serene woodland scenes and dramatic skies to tranquil waters and coastal landscapes. Each piece is carefully crafted using high-quality acrylic paints (and occasionally oils), capturing the beauty of the natural world through my unique perspective.</p>
+            <p>I specialise in nature-inspired artwork — from serene woodland scenes and dramatic skies to tranquil waters and coastal landscapes. Each piece is carefully crafted using high-quality acrylic paints (and occasionally oils), capturing the beauty of the natural world through my unique perspective.</p>
             <p>While painting is my passion rather than my profession, I do take on select commissions. I particularly enjoy creating custom landscape and scenery pieces that bring the beauty of nature into your home.</p>
             <p>Thank you for exploring my collection of original paintings. I hope you enjoy my artwork as much as I enjoy creating it.</p>
           </div>

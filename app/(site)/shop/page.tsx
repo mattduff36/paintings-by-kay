@@ -26,7 +26,7 @@ export default async function ShopPage({ searchParams }: { searchParams?: { succ
         <ConfirmPurchase />
         <p className="mb-4 rounded bg-green-100 p-3 text-green-700">Thank you for your purchase!</p>
       </>}
-      {canceled && <p className="mb-4 rounded bg-yellow-100 p-3 text-yellow-700">Checkout canceled.</p>}
+      {canceled && <p className="mb-4 rounded bg-yellow-100 p-3 text-yellow-700">Checkout cancelled.</p>}
       {products.length === 0 ? (
         <p className="text-center text-gray-600">No items are currently for sale. Please check back soon.</p>
       ) : (
