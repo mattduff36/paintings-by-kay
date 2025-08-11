@@ -28,7 +28,9 @@ export function SiteNav({ showAdminActions = false }: { showAdminActions?: boole
           <li><Link href="/gallery">Gallery</Link></li>
           <li><Link href="/#about">About</Link></li>
           <li><Link href="/#contact">Contact</Link></li>
-          <li><Link href="/shop">Shop</Link></li>
+          <li>
+            <Link href="/shop" className="nav-shop-accent">Shop</Link>
+          </li>
         </ul>
         {showAdminActions ? <AdminNavButtons /> : null}
         <button className="menu-toggle" aria-label="Menu" onClick={() => setOpen((v) => !v)}>

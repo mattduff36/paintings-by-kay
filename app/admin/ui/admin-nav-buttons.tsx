@@ -9,13 +9,16 @@ export function AdminNavButtons() {
     function onDirty() { setIsDirty(true); }
     function onClean() { setIsDirty(false); setIsSaving(false); }
     function onSaving() { setIsSaving(true); }
+    function onDone() { setIsSaving(false); }
     window.addEventListener('admin:dirty', onDirty);
     window.addEventListener('admin:clean', onClean);
     window.addEventListener('admin:saving', onSaving);
+    window.addEventListener('admin:done', onDone);
     return () => {
       window.removeEventListener('admin:dirty', onDirty);
       window.removeEventListener('admin:clean', onClean);
       window.removeEventListener('admin:saving', onSaving);
+      window.removeEventListener('admin:done', onDone);
     };
   }, []);
 

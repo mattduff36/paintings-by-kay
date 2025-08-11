@@ -5,6 +5,7 @@ export function FullscreenClient() {
   useEffect(() => {
     const overlay = document.querySelector('.fullscreen-overlay') as HTMLElement | null;
     const fullscreenImage = document.querySelector('.fullscreen-image') as HTMLImageElement | null;
+    const fullscreenDetails = document.querySelector('.fullscreen-details') as HTMLElement | null;
     const closeButton = document.querySelector('.close-fullscreen') as HTMLElement | null;
     if (!overlay || !fullscreenImage || !closeButton) return;
 
@@ -31,9 +32,10 @@ export function FullscreenClient() {
       applyTransform();
     }
 
-    function openFullscreen(imageSrc: string) {
+    function openFullscreen(imageSrc: string, detailsHtml?: string) {
       if (!overlay || !fullscreenImage) return;
       fullscreenImage.src = imageSrc;
+      if (fullscreenDetails) fullscreenDetails.innerHTML = detailsHtml || '';
       overlay.style.display = 'block';
       document.body.style.overflow = 'hidden';
       resetTransform();
@@ -57,14 +59,65 @@ export function FullscreenClient() {
     overlay.addEventListener('click', onOverlayClick);
     document.addEventListener('keydown', onKeyDown);
 
-    const images = Array.from(document.querySelectorAll('#fullGallery .gallery-item picture img')) as HTMLImageElement[];
-    const onImageClick = (ev: Event) => {
+    // Gallery images
+    const galleryImages = Array.from(document.querySelectorAll('#fullGallery .gallery-item picture img')) as HTMLImageElement[];
+    const onGalleryImageClick = (ev: Event) => {
       const target = ev.currentTarget as HTMLImageElement;
       const frontSrc = target.getAttribute('data-front-src');
       const src = frontSrc || target.src.replace(/\/mobile\//, '/desktop/').replace(/\/tablet\//, '/desktop/');
       openFullscreen(src);
     };
-    images.forEach((img) => img.addEventListener('click', onImageClick));
+    galleryImages.forEach((img) => img.addEventListener('click', onGalleryImageClick));
+
+    // Shop images: build details card with name, dims, type, price and Buy button
+    const shopImages = Array.from(document.querySelectorAll('#shopGrid .shop-image')) as HTMLImageElement[];
+    const onShopImageClick = (ev: Event) => {
+      const target = ev.currentTarget as HTMLImageElement;
+      const frontSrc = target.getAttribute('data-front-src');
+      const src = frontSrc || target.src.replace(/\/mobile\//, '/desktop/').replace(/\/tablet\//, '/desktop/');
+      const name = target.getAttribute('data-name') || '';
+      const type = target.getAttribute('data-type') || '';
+      const dims = target.getAttribute('data-dimensions') || '';
+      const price = target.getAttribute('data-price') || '';
+      const productId = target.getAttribute('data-product-id') || '';
+      const isSold = target.getAttribute('data-is-sold') === 'true';
+      const isForSale = target.getAttribute('data-is-for-sale') === 'true';
+      const detailsHtml = `
+        <div>
+          <h3>${name}</h3>
+          <p>${dims} • ${type}</p>
+          <p><strong>${price}</strong></p>
+          <div class="actions">
+            ${!isSold && isForSale ? `<button class="fs-buy-button" data-product-id="${productId}">Buy</button>` : `<span style="color:#842029;font-weight:600">Sold</span>`}
+          </div>
+        </div>`;
+      openFullscreen(src, detailsHtml);
+    };
+    shopImages.forEach((img) => img.addEventListener('click', onShopImageClick));
+
+    // Handle Buy click inside details panel via POST
+    const onDetailsClick = async (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      if (!t) return;
+      if (t.classList.contains('fs-buy-button')) {
+        e.preventDefault();
+        const pid = t.getAttribute('data-product-id');
+        if (!pid) return;
+        try { (t as HTMLButtonElement).disabled = true; } catch {}
+        try {
+          const res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId: pid }),
+          });
+          const data = await res.json();
+          if (data?.url) window.location.href = data.url;
+        } finally {
+          try { (t as HTMLButtonElement).disabled = false; } catch {}
+        }
+      }
+    };
+    if (fullscreenDetails) fullscreenDetails.addEventListener('click', onDetailsClick);
 
     // Zoom with wheel
     const onWheel = (e: WheelEvent) => {
@@ -114,7 +167,9 @@ export function FullscreenClient() {
       closeButton.removeEventListener('click', closeFullscreen);
       overlay.removeEventListener('click', onOverlayClick);
       document.removeEventListener('keydown', onKeyDown);
-      images.forEach((img) => img.removeEventListener('click', onImageClick));
+    galleryImages.forEach((img) => img.removeEventListener('click', onGalleryImageClick));
+    shopImages.forEach((img) => img.removeEventListener('click', onShopImageClick));
+    if (fullscreenDetails) fullscreenDetails.removeEventListener('click', onDetailsClick);
       overlay.removeEventListener('wheel', onWheel as any);
       fullscreenImage.removeEventListener('dblclick', onDblClick);
       fullscreenImage.removeEventListener('mousedown', onMouseDown);
