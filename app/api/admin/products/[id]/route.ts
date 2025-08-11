@@ -21,6 +21,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (!updated) return NextResponse.json({ error: 'Failed to update' }, { status: 400 });
   try {
     revalidatePath('/gallery');
+    revalidatePath('/shop');
     revalidatePath('/');
   } catch {}
   return NextResponse.json({ item: updated });

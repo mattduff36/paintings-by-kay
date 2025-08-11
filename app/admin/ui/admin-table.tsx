@@ -101,7 +101,7 @@ export function AdminTable({ products }: { products: Product[] }) {
   async function saveRow(idx: number): Promise<boolean> {
     const row = rows[idx];
     // Skip rows that are neither existing products nor selected for sale
-    if (!row.id && !row.is_for_sale) return true;
+    if (!row.id && !row.is_for_sale && !row.is_sold) return true;
     if (!row.image_path) return false;
     const validationMsg = missingFieldsMessage(row);
     if (validationMsg) {
@@ -166,7 +166,7 @@ export function AdminTable({ products }: { products: Product[] }) {
     let hadErrors = false;
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      if (row.id || row.is_for_sale) {
+      if (row.id || row.is_for_sale || row.is_sold) {
         const ok = await saveRow(i);
         if (!ok) hadErrors = true;
       }
@@ -235,7 +235,7 @@ export function AdminTable({ products }: { products: Product[] }) {
                   value={row.price}
                   onChange={(e) => updateRow(idx, { price: e.target.value })}
                 />
-                {row.error && (row.id || row.is_for_sale) ? (
+                {row.error && (row.id || row.is_for_sale || row.is_sold) ? (
                   <div className="pt-1 text-xs text-red-600">{row.error}</div>
                 ) : null}
               </div>
@@ -320,7 +320,7 @@ export function AdminTable({ products }: { products: Product[] }) {
                     />
                   </td>
                   <td className="p-2 text-right">
-                    {row.error && (row.id || row.is_for_sale) ? (
+                    {row.error && (row.id || row.is_for_sale || row.is_sold) ? (
                       <div className="pt-1 text-xs text-red-600">{row.error}</div>
                     ) : null}
                   </td>

@@ -27,7 +27,7 @@ export async function getProductById(id: string): Promise<Product | null> {
   return rows[0] || null;
 }
 
-export async function createProduct(input: Omit<Product, 'id' | 'created_at' | 'updated_at' | 'is_sold' | 'is_for_sale'> & { is_for_sale?: boolean }): Promise<Product> {
+export async function createProduct(input: Omit<Product, 'id' | 'created_at' | 'updated_at'> & { is_for_sale?: boolean; is_sold?: boolean }): Promise<Product> {
   await ensureProductsTable();
   const id = uuidv4();
   const now = new Date().toISOString();
@@ -37,7 +37,7 @@ export async function createProduct(input: Omit<Product, 'id' | 'created_at' | '
       price_gbp_pennies, notes, image_path, is_for_sale, is_sold,
       stripe_product_id, stripe_price_id, created_at, updated_at
     ) values (
-      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,false,null,null,$11,$11
+      $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,null,null,$12,$12
     ) returning *`,
     [
       id,
@@ -49,7 +49,8 @@ export async function createProduct(input: Omit<Product, 'id' | 'created_at' | '
       input.price_gbp_pennies,
       input.notes ?? null,
       input.image_path,
-      Boolean((input as any).is_for_sale ?? false),
+      Boolean(input.is_for_sale ?? false),
+      Boolean(input.is_sold ?? false),
       now,
     ],
   );

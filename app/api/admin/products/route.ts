@@ -29,6 +29,7 @@ export async function POST(request: Request) {
     notes: null,
     image_path,
     is_for_sale: Boolean(body?.is_for_sale ?? false),
+    is_sold: Boolean(body?.is_sold ?? false),
   } as any;
   const created = await createProduct(input).catch((e) => {
     console.error(e);
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
   if (!created) return NextResponse.json({ error: 'Failed to create' }, { status: 400 });
   try {
     revalidatePath('/gallery');
+    revalidatePath('/shop');
     revalidatePath('/');
   } catch {}
   return NextResponse.json({ item: created });
