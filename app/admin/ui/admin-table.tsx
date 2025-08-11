@@ -165,9 +165,36 @@ export function AdminTable({ products }: { products: Product[] }) {
     if (saving) return;
     setSaving(true);
     let hadErrors = false;
+    // Pre-validate duplicate names among rows that will be saved
+    const nameCounts = new Map<string, number>();
+    for (const r of rows) {
+      const willSave = Boolean(r.id || r.is_for_sale || r.is_sold);
+      const key = willSave ? r.name.trim().toLowerCase() : '';
+      if (key) nameCounts.set(key, (nameCounts.get(key) || 0) + 1);
+    }
+    const duplicateNameKeys = new Set(
+      Array.from(nameCounts.entries())
+        .filter(([, count]) => count > 1)
+        .map(([key]) => key),
+    );
+    // Flag duplicate name errors pre-emptively
+    if (duplicateNameKeys.size > 0) {
+      rows.forEach((row, i) => {
+        const willSave = Boolean(row.id || row.is_for_sale || row.is_sold);
+        const key = willSave ? row.name.trim().toLowerCase() : '';
+        if (key && duplicateNameKeys.has(key)) {
+          hadErrors = true;
+          updateRow(i, { error: `Duplicate name: "${row.name}" is already used on another item` });
+        }
+      });
+    }
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       if (row.id || row.is_for_sale || row.is_sold) {
+        const key = row.name.trim().toLowerCase();
+        if (key && duplicateNameKeys.has(key)) {
+          continue; // skip save for duplicates
+        }
         const ok = await saveRow(i);
         if (!ok) hadErrors = true;
       }
