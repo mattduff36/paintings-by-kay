@@ -47,8 +47,6 @@ export async function POST(request: Request) {
             product,
             session,
             siteUrl,
-            // Note: pass order if available so email shows friendly PBK-XXX label
-            order: undefined,
           }).catch(() => {});
         }
         try {

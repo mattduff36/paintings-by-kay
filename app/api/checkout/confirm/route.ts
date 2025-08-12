@@ -34,7 +34,6 @@ export async function POST(request: Request) {
           product,
           session,
           siteUrl,
-          // Note: next step improvement could include fetching order by session to include label here as well
         }).catch(() => {});
       }
     }

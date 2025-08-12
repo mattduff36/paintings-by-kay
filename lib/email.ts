@@ -23,14 +23,17 @@ export interface PurchaseEmailParams {
   product: Product;
   session: Stripe.Checkout.Session;
   siteUrl: string;
+  order?: Order | null;
 }
 
 export async function sendPurchaseConfirmationEmail(params: PurchaseEmailParams): Promise<void> {
-  const { toEmail, product, session, siteUrl } = params;
+  const { toEmail, product, session, siteUrl, order } = params;
   const fromEmail = process.env.EMAIL_FROM || process.env.RESEND_FROM || '';
   const bccEmail = process.env.EMAIL_BCC || '';
 
-  const orderLabel = `PBK-${String((params as any).order?.order_number || 0).padStart(3, '0')}`;
+  const orderLabel = order && typeof order.order_number === 'number'
+    ? `PBK-${String(order.order_number).padStart(3, '0')}`
+    : session.id;
   const subject = `Order confirmation: ${product.name}`;
   const priceGbp = (product.price_gbp_pennies / 100).toFixed(2);
   const shippingAddress = (session.customer_details?.address &&
