@@ -4,6 +4,7 @@ import { listOrders } from '@/lib/db/orders';
 import Link from 'next/link';
 import { updateOrderStatus } from '@/lib/db/orders';
 import { sendOrderDespatchedEmails } from '@/lib/email';
+import { OrderDespatchButton } from './order-despatch-button';
 
 export async function AdminDashboard() {
   const products = await getAllProducts().catch(() => []);
@@ -100,9 +101,7 @@ function OrdersTable({ orders }: OrdersTableProps) {
               <td className="p-2 whitespace-nowrap">{formatDate(o.despatched_at)}</td>
               <td className="p-2 text-right">
                 {o.status !== 'despatched' ? (
-                  <form action={markDespatched.bind(null, o.id)}>
-                    <button className="rounded border px-3 py-1">Mark despatched</button>
-                  </form>
+                  <OrderDespatchButton orderId={o.id} />
                 ) : null}
               </td>
             </tr>

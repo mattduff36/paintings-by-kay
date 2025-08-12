@@ -18,6 +18,7 @@ export interface Order {
   created_at: string;
   updated_at: string;
   despatched_at: string | null;
+  tracking_number: string | null;
 }
 
 

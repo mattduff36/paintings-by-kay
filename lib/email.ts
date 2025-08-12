@@ -247,6 +247,7 @@ export async function sendOrderDespatchedEmails(params: {
     `Order: ${orderLabel}\n` +
     `Item: ${order.product_name}\n` +
     `Price: £${price}\n` +
+    (order.tracking_number ? `Tracking: ${order.tracking_number}\n` : '') +
     `Shipping address: ${addr}\n` +
     `${siteUrl}\n` +
     `Paintings by Kay`;
@@ -258,6 +259,7 @@ export async function sendOrderDespatchedEmails(params: {
         <li><strong>Order</strong>: ${orderLabel}</li>
         <li><strong>Item</strong>: ${order.product_name}</li>
         <li><strong>Price</strong>: £${price}</li>
+        ${order.tracking_number ? `<li><strong>Tracking</strong>: ${order.tracking_number}</li>` : ''}
         <li><strong>Shipping address</strong>: ${addr}</li>
       </ul>
       <p>If you have any questions, reply to this email.</p>
