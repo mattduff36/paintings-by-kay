@@ -34,6 +34,7 @@ export async function POST(request: Request) {
           product,
           session,
           siteUrl,
+          order,
         }).catch(() => {});
       }
     }
