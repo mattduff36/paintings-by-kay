@@ -97,7 +97,7 @@ export async function sendPurchaseConfirmationEmail(params: PurchaseEmailParams)
 }
 
 function getOwnerEmail(): string {
-  return process.env.OWNER_EMAIL || 'hello@paintingsbykay.com';
+  return process.env.OWNER_EMAIL || 'hello@paintingsbykay.co.uk';
 }
 
 function formatAddressFromSession(session: Stripe.Checkout.Session): string {
