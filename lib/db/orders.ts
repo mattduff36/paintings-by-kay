@@ -1,0 +1,146 @@
+import type Stripe from 'stripe';
+import { pgQuery } from '@/lib/db/pg';
+import type { Order } from '@/lib/types/order';
+import type { Product } from '@/lib/types/product';
+
+async function ensureOrdersTable(): Promise<void> {
+  await pgQuery(`
+    create table if not exists orders (
+      id text primary key,
+      stripe_session_id text not null unique,
+      product_id text not null,
+      product_name text not null,
+      price_gbp_pennies int not null,
+      customer_email text not null,
+      customer_name text null,
+      customer_phone text null,
+      shipping_line1 text null,
+      shipping_line2 text null,
+      shipping_city text null,
+      shipping_postal_code text null,
+      shipping_country text null,
+      amount_total_pennies int not null,
+      status text not null,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      despatched_at timestamptz null
+    );
+  `);
+}
+
+export async function createInitiatedOrder(params: {
+  sessionId: string;
+  product: Product;
+  amountTotalPennies: number;
+  customerEmail?: string | null;
+}): Promise<Order> {
+  await ensureOrdersTable();
+  const { sessionId, product, amountTotalPennies, customerEmail } = params;
+  const { rows } = await pgQuery<Order>(
+    `insert into orders (
+      id, stripe_session_id, product_id, product_name, price_gbp_pennies,
+      customer_email, customer_name, customer_phone,
+      shipping_line1, shipping_line2, shipping_city, shipping_postal_code, shipping_country,
+      amount_total_pennies, status
+    ) values (
+      $1, $2, $3, $4, $5,
+      $6, null, null,
+      null, null, null, null, null,
+      $7, 'initiated'
+    ) on conflict (stripe_session_id) do update set updated_at = now() returning *`,
+    [
+      sessionId,
+      sessionId,
+      product.id,
+      product.name,
+      product.price_gbp_pennies,
+      (customerEmail || '').trim(),
+      amountTotalPennies,
+    ],
+  );
+  return rows[0];
+}
+
+export async function upsertOrderFromSession(params: {
+  session: Stripe.Checkout.Session;
+  product: Product;
+  status: 'paid' | 'failed' | 'cancelled';
+}): Promise<{ order: Order; statusChanged: boolean }> {
+  await ensureOrdersTable();
+  const { session, product, status } = params;
+  const address = session.customer_details?.address;
+  const name = session.customer_details?.name || null;
+  const phone = session.customer_details?.phone || null;
+  const email = session.customer_details?.email || session.customer_email || '';
+  const amount = (session.amount_total ?? product.price_gbp_pennies) as number;
+
+  const { rows } = await pgQuery<Order>(
+    `insert into orders as o (
+      id, stripe_session_id, product_id, product_name, price_gbp_pennies,
+      customer_email, customer_name, customer_phone,
+      shipping_line1, shipping_line2, shipping_city, shipping_postal_code, shipping_country,
+      amount_total_pennies, status
+    ) values (
+      $1, $2, $3, $4, $5,
+      $6, $7, $8,
+      $9, $10, $11, $12, $13,
+      $14, $15
+    ) on conflict (stripe_session_id) do update set
+      product_id = excluded.product_id,
+      product_name = excluded.product_name,
+      price_gbp_pennies = excluded.price_gbp_pennies,
+      customer_email = excluded.customer_email,
+      customer_name = excluded.customer_name,
+      customer_phone = excluded.customer_phone,
+      shipping_line1 = excluded.shipping_line1,
+      shipping_line2 = excluded.shipping_line2,
+      shipping_city = excluded.shipping_city,
+      shipping_postal_code = excluded.shipping_postal_code,
+      shipping_country = excluded.shipping_country,
+      amount_total_pennies = excluded.amount_total_pennies,
+      updated_at = now(),
+      status = excluded.status
+    returning *`,
+    [
+      session.id,
+      session.id,
+      product.id,
+      product.name,
+      product.price_gbp_pennies,
+      email,
+      name,
+      phone,
+      address?.line1 || null,
+      address?.line2 || null,
+      address?.city || null,
+      address?.postal_code || null,
+      address?.country || null,
+      amount,
+      status,
+    ],
+  );
+  const order = rows[0];
+  // Determine if status changed by comparing updated row to intended status and relying on unique session id
+  const statusChanged = order.status === status; // If upsert succeeded, status now equals intended
+  return { order, statusChanged };
+}
+
+export async function listOrders(): Promise<Order[]> {
+  await ensureOrdersTable();
+  const { rows } = await pgQuery<Order>(
+    `select * from orders order by created_at desc`,
+  );
+  return rows;
+}
+
+export async function updateOrderStatus(id: string, status: Order['status']): Promise<Order> {
+  await ensureOrdersTable();
+  const setDespatched = status === 'despatched' ? ', despatched_at = now()' : '';
+  const { rows } = await pgQuery<Order>(
+    `update orders set status = $1, updated_at = now()${setDespatched} where id = $2 returning *`,
+    [status, id],
+  );
+  return rows[0];
+}
+
+

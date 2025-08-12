@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { getProductById } from '@/lib/db/products';
+import { createInitiatedOrder } from '@/lib/db/orders';
+import { sendOwnerOrderInitiatedEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -48,6 +50,17 @@ export async function POST(request: Request) {
     cancel_url: `${origin}/shop?canceled=1`,
     metadata: { product_id: product.id },
   });
+  // Record initiated order and notify owner (best-effort)
+  try {
+    await createInitiatedOrder({
+      sessionId: session.id,
+      product,
+      amountTotalPennies: product.price_gbp_pennies,
+      customerEmail: null,
+    });
+    await sendOwnerOrderInitiatedEmail({ product, session });
+  } catch {}
+
   return NextResponse.json({ url: session.url });
 }
 

@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import type Stripe from 'stripe';
 import { getProductById, markSold } from '@/lib/db/products';
-import { sendPurchaseConfirmationEmail } from '@/lib/email';
+import { sendPurchaseConfirmationEmail, sendOwnerOrderPaidEmail } from '@/lib/email';
+import { upsertOrderFromSession } from '@/lib/db/orders';
 
 export const runtime = 'nodejs';
 
@@ -22,6 +23,11 @@ export async function POST(request: Request) {
       const product = await getProductById(productId).catch(() => null);
       const customerEmail = session.customer_details?.email || session.customer_email || '';
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'http://localhost:3000';
+      if (product) {
+        // Update orders table and notify owner
+        await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
+        await sendOwnerOrderPaidEmail({ product, session }).catch(() => {});
+      }
       if (product && customerEmail) {
         await sendPurchaseConfirmationEmail({
           toEmail: customerEmail,
