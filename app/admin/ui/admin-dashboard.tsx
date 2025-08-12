@@ -28,6 +28,7 @@ export async function AdminDashboard() {
 interface OrdersTableProps {
   orders: {
     id: string;
+    order_number: number;
     product_name: string;
     customer_email: string;
     customer_name: string | null;
@@ -68,7 +69,7 @@ function OrdersTable({ orders }: OrdersTableProps) {
         <thead className="bg-gray-50 text-left">
           <tr>
             <th className="p-2">Placed</th>
-            <th className="p-2">Order ID</th>
+            <th className="p-2">Order</th>
             <th className="p-2">Item</th>
             <th className="p-2">Customer</th>
             <th className="p-2">Email</th>
@@ -83,7 +84,7 @@ function OrdersTable({ orders }: OrdersTableProps) {
           {orders.map((o) => (
             <tr key={o.id} className="border-t align-middle">
               <td className="p-2 whitespace-nowrap">{formatDate(o.created_at)}</td>
-              <td className="p-2">{o.id}</td>
+              <td className="p-2">{`PBK-${String(o.order_number).padStart(3, '0')}`}</td>
               <td className="p-2">{o.product_name}</td>
               <td className="p-2">{o.customer_name || '-'}</td>
               <td className="p-2">

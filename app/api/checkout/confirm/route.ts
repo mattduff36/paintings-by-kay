@@ -25,8 +25,8 @@ export async function POST(request: Request) {
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'http://localhost:3000';
       if (product) {
         // Update orders table and notify owner
-        await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
-        await sendOwnerOrderPaidEmail({ product, session }).catch(() => {});
+        const { order } = await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
+        await sendOwnerOrderPaidEmail({ product, session, order }).catch(() => {});
       }
       if (product && customerEmail) {
         await sendPurchaseConfirmationEmail({
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
           product,
           session,
           siteUrl,
+          // Note: next step improvement could include fetching order by session to include label here as well
         }).catch(() => {});
       }
     }

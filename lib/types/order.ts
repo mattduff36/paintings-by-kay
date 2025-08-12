@@ -1,5 +1,6 @@
 export interface Order {
   id: string;
+  order_number: number;
   stripe_session_id: string;
   product_id: string;
   product_name: string;

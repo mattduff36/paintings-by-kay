@@ -52,13 +52,13 @@ export async function POST(request: Request) {
   });
   // Record initiated order and notify owner (best-effort)
   try {
-    await createInitiatedOrder({
+    const order = await createInitiatedOrder({
       sessionId: session.id,
       product,
       amountTotalPennies: product.price_gbp_pennies,
       customerEmail: null,
     });
-    await sendOwnerOrderInitiatedEmail({ product, session });
+    await sendOwnerOrderInitiatedEmail({ product, session, order });
   } catch {}
 
   return NextResponse.json({ url: session.url });

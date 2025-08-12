@@ -38,8 +38,8 @@ export async function POST(request: Request) {
         const customerEmail = session.customer_details?.email || session.customer_email || '';
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'http://localhost:3000';
         if (product) {
-          await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
-          await sendOwnerOrderPaidEmail({ product, session }).catch(() => {});
+          const { order } = await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
+          await sendOwnerOrderPaidEmail({ product, session, order }).catch(() => {});
         }
         if (product && customerEmail) {
           await sendPurchaseConfirmationEmail({
@@ -47,6 +47,8 @@ export async function POST(request: Request) {
             product,
             session,
             siteUrl,
+            // Note: pass order if available so email shows friendly PBK-XXX label
+            order: undefined,
           }).catch(() => {});
         }
         try {
@@ -62,8 +64,8 @@ export async function POST(request: Request) {
     if (productId) {
       const product = await getProductById(productId).catch(() => null);
       if (product) {
-        await upsertOrderFromSession({ session, product, status: 'failed' }).catch(() => ({ order: null } as any));
-        await sendOwnerOrderFailedEmail({ product, session, reason: event.type }).catch(() => {});
+        const { order } = await upsertOrderFromSession({ session, product, status: 'failed' }).catch(() => ({ order: null } as any));
+        await sendOwnerOrderFailedEmail({ product, session, reason: event.type, order }).catch(() => {});
       }
     }
   }

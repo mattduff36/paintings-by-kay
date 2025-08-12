@@ -30,6 +30,7 @@ export async function sendPurchaseConfirmationEmail(params: PurchaseEmailParams)
   const fromEmail = process.env.EMAIL_FROM || process.env.RESEND_FROM || '';
   const bccEmail = process.env.EMAIL_BCC || '';
 
+  const orderLabel = `PBK-${String((params as any).order?.order_number || 0).padStart(3, '0')}`;
   const subject = `Order confirmation: ${product.name}`;
   const priceGbp = (product.price_gbp_pennies / 100).toFixed(2);
   const shippingAddress = (session.customer_details?.address &&
@@ -48,7 +49,7 @@ export async function sendPurchaseConfirmationEmail(params: PurchaseEmailParams)
       <h2 style="margin:0 0 16px;">Thank you for your purchase!</h2>
       <p>We're delighted to confirm your order for <strong>${product.name}</strong>.</p>
       <ul>
-        <li><strong>Order ID</strong>: ${session.id}</li>
+         <li><strong>Order</strong>: ${orderLabel}</li>
         <li><strong>Price</strong>: £${priceGbp}</li>
         <li><strong>Shipping</strong>: Free UK postage & packaging</li>
         <li><strong>Shipping address</strong>: ${shippingAddress}</li>
@@ -63,7 +64,7 @@ export async function sendPurchaseConfirmationEmail(params: PurchaseEmailParams)
 
   const text = `Thank you for your purchase!\n\n` +
     `Order confirmation for ${product.name}.\n` +
-    `Order ID: ${session.id}\n` +
+    `Order: ${orderLabel}\n` +
     `Price: £${priceGbp}\n` +
     `Shipping: Free UK postage & packaging\n` +
     `Shipping address: ${shippingAddress}\n\n` +
@@ -135,19 +136,23 @@ async function sendBasicEmail(to: string[], subject: string, html: string, text:
 export async function sendOwnerOrderInitiatedEmail(params: {
   product: Product;
   session: Stripe.Checkout.Session;
+  order?: Order | null;
 }): Promise<void> {
-  const { product, session } = params;
-  const subject = `Checkout initiated: ${product.name}`;
+  const { product, session, order } = params;
+  const label = order && typeof order.order_number === 'number'
+    ? `PBK-${String(order.order_number).padStart(3, '0')}`
+    : session.id;
+  const subject = `Checkout initiated: ${product.name} (${label})`;
   const text =
     `A customer started checkout.\n` +
-    `Order ID: ${session.id}\n` +
+    `Order: ${label}\n` +
     `Product: ${product.name}\n` +
     `Price: £${(product.price_gbp_pennies / 100).toFixed(2)}\n`;
   const html = `
     <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #111;">
       <h2 style="margin:0 0 16px;">Checkout initiated</h2>
       <ul>
-        <li><strong>Order ID</strong>: ${session.id}</li>
+        <li><strong>Order</strong>: ${label}</li>
         <li><strong>Product</strong>: ${product.name}</li>
         <li><strong>Price</strong>: £${(product.price_gbp_pennies / 100).toFixed(2)}</li>
       </ul>
@@ -159,16 +164,20 @@ export async function sendOwnerOrderInitiatedEmail(params: {
 export async function sendOwnerOrderPaidEmail(params: {
   product: Product;
   session: Stripe.Checkout.Session;
+  order?: Order | null;
 }): Promise<void> {
-  const { product, session } = params;
-  const subject = `Order paid: ${product.name}`;
+  const { product, session, order } = params;
+  const label = order && typeof order.order_number === 'number'
+    ? `PBK-${String(order.order_number).padStart(3, '0')}`
+    : session.id;
+  const subject = `Order paid: ${product.name} (${label})`;
   const addr = formatAddressFromSession(session);
   const customerName = session.customer_details?.name || 'Unknown';
   const customerEmail = session.customer_details?.email || session.customer_email || 'Unknown';
   const customerPhone = session.customer_details?.phone || 'Unknown';
   const text =
     `An order has been paid.\n` +
-    `Order ID: ${session.id}\n` +
+    `Order: ${label}\n` +
     `Product: ${product.name}\n` +
     `Price: £${(product.price_gbp_pennies / 100).toFixed(2)}\n` +
     `Customer: ${customerName}\n` +
@@ -179,7 +188,7 @@ export async function sendOwnerOrderPaidEmail(params: {
     <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #111;">
       <h2 style="margin:0 0 16px;">Order paid</h2>
       <ul>
-        <li><strong>Order ID</strong>: ${session.id}</li>
+        <li><strong>Order</strong>: ${label}</li>
         <li><strong>Product</strong>: ${product.name}</li>
         <li><strong>Price</strong>: £${(product.price_gbp_pennies / 100).toFixed(2)}</li>
         <li><strong>Customer</strong>: ${customerName}</li>
@@ -196,19 +205,23 @@ export async function sendOwnerOrderFailedEmail(params: {
   product: Product;
   session: Stripe.Checkout.Session;
   reason?: string;
+  order?: Order | null;
 }): Promise<void> {
-  const { product, session, reason } = params;
-  const subject = `Checkout failed: ${product.name}`;
+  const { product, session, reason, order } = params;
+  const label = order && typeof order.order_number === 'number'
+    ? `PBK-${String(order.order_number).padStart(3, '0')}`
+    : session.id;
+  const subject = `Checkout failed: ${product.name} (${label})`;
   const text =
     `A checkout failed or was cancelled.\n` +
-    `Order ID: ${session.id}\n` +
+    `Order: ${label}\n` +
     `Product: ${product.name}\n` +
     `Reason: ${reason || 'unknown'}\n`;
   const html = `
     <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #111;">
       <h2 style="margin:0 0 16px;">Checkout failed/cancelled</h2>
       <ul>
-        <li><strong>Order ID</strong>: ${session.id}</li>
+        <li><strong>Order</strong>: ${label}</li>
         <li><strong>Product</strong>: ${product.name}</li>
         <li><strong>Reason</strong>: ${reason || 'unknown'}</li>
       </ul>
@@ -222,12 +235,13 @@ export async function sendOrderDespatchedEmails(params: {
   siteUrl: string;
 }): Promise<void> {
   const { order, siteUrl } = params;
-  const subjectCustomer = `Your order has been despatched: ${order.product_name}`;
+  const orderLabel = `PBK-${String(order.order_number).padStart(3, '0')}`;
+  const subjectCustomer = `Your order has been despatched: ${order.product_name} (${orderLabel})`;
   const addr = formatAddressFromOrder(order);
   const price = (order.price_gbp_pennies / 100).toFixed(2);
   const textCustomer =
     `Good news! Your artwork has been despatched.\n` +
-    `Order ID: ${order.id}\n` +
+    `Order: ${orderLabel}\n` +
     `Item: ${order.product_name}\n` +
     `Price: £${price}\n` +
     `Shipping address: ${addr}\n` +
@@ -238,7 +252,7 @@ export async function sendOrderDespatchedEmails(params: {
       <h2 style="margin:0 0 16px;">Your order has been despatched</h2>
       <p>We're pleased to let you know your artwork is on its way.</p>
       <ul>
-        <li><strong>Order ID</strong>: ${order.id}</li>
+        <li><strong>Order</strong>: ${orderLabel}</li>
         <li><strong>Item</strong>: ${order.product_name}</li>
         <li><strong>Price</strong>: £${price}</li>
         <li><strong>Shipping address</strong>: ${addr}</li>
@@ -248,13 +262,13 @@ export async function sendOrderDespatchedEmails(params: {
   `;
   await sendBasicEmail([order.customer_email], subjectCustomer, htmlCustomer, textCustomer);
 
-  const subjectOwner = `Order despatched: ${order.product_name}`;
-  const textOwner = `Order marked despatched.\nOrder ID: ${order.id}\nItem: ${order.product_name}`;
+  const subjectOwner = `Order despatched: ${order.product_name} (${orderLabel})`;
+  const textOwner = `Order marked despatched.\nOrder: ${orderLabel}\nItem: ${order.product_name}`;
   const htmlOwner = `
     <div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #111;">
       <h2 style="margin:0 0 16px;">Order despatched</h2>
       <ul>
-        <li><strong>Order ID</strong>: ${order.id}</li>
+        <li><strong>Order</strong>: ${orderLabel}</li>
         <li><strong>Item</strong>: ${order.product_name}</li>
       </ul>
     </div>
