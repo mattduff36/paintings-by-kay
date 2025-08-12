@@ -4,6 +4,7 @@ import { getProductById, markSold } from '@/lib/db/products';
 import { revalidatePath } from 'next/cache';
 import { sendOwnerOrderFailedEmail, sendOwnerOrderPaidEmail, sendPurchaseConfirmationEmail } from '@/lib/email';
 import { upsertOrderFromSession } from '@/lib/db/orders';
+import type { Order } from '@/lib/types/order';
 import type Stripe from 'stripe';
 
 export const runtime = 'nodejs';
@@ -37,8 +38,10 @@ export async function POST(request: Request) {
         const product = await getProductById(productId).catch(() => null);
         const customerEmail = session.customer_details?.email || session.customer_email || '';
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || 'http://localhost:3000';
+        let order: Order | null = null;
         if (product) {
-          const { order } = await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
+          const res = await upsertOrderFromSession({ session, product, status: 'paid' }).catch(() => ({ order: null } as any));
+          order = (res as any).order || null;
           await sendOwnerOrderPaidEmail({ product, session, order }).catch(() => {});
         }
         if (product && customerEmail) {
