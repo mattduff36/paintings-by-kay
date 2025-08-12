@@ -17,10 +17,12 @@ export function OrderDespatchButton({ orderId }: { orderId: string }) {
         body: JSON.stringify({ trackingNumber: tracking.trim() || null }),
       });
       if (!res.ok) throw new Error('Failed to update');
+      window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'Despatch initiated. Emails are being sent.', type: 'success' } }));
       setOpen(false);
       window.location.reload();
     } catch (e) {
       setError((e as Error).message);
+      window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'Failed to mark despatched', type: 'error' } }));
     } finally {
       setBusy(false);
     }

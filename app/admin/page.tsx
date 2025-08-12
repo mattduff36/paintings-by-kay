@@ -2,6 +2,7 @@ import { isAdminAuthenticated } from '@/lib/auth/session';
 import { AdminLoginForm } from './ui/admin-login-form';
 import { AdminDashboard } from './ui/admin-dashboard';
 import { SiteNav } from '@/app/(site)/components/site-nav';
+import { Notifications } from './ui/notifications';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,7 @@ export default async function AdminPage() {
         <SiteNav showAdminActions />
       </header>
       <main>
+        <Notifications />
         <AdminDashboard />
       </main>
     </>
