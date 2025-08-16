@@ -62,14 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'gallery20', name: 'nature-painting-nottinghamshire-7' },
         { id: 'gallery21', name: 'local-artist-painting-mansfield-7' },
         { id: 'gallery22', name: 'original-canvas-painting-mansfield-8' },
-        { id: 'gallery23', name: 'nature-painting-nottinghamshire-8' },
+
         { id: 'gallery24', name: 'local-artist-painting-mansfield-8' },
         { id: 'gallery25', name: 'original-canvas-painting-mansfield-9' },
         { id: 'gallery26', name: 'nature-painting-nottinghamshire-9' },
         { id: 'gallery27', name: 'local-artist-painting-mansfield-9' },
         { id: 'gallery28', name: 'original-canvas-painting-mansfield-10' },
         { id: 'gallery29', name: 'nature-painting-nottinghamshire-10' },
-        { id: 'gallery31', name: 'local-artist-painting-mansfield-10' },
+
         { id: 'gallery33', name: 'original-canvas-painting-mansfield-11' },
         { id: 'gallery34', name: 'nature-painting-nottinghamshire-11' },
         { id: 'gallery35', name: 'local-artist-painting-mansfield-11' },

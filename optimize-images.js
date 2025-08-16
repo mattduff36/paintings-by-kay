@@ -52,14 +52,14 @@ const galleryImageNames = {
     'gallery20': 'nature-painting-nottinghamshire-7',
     'gallery21': 'local-artist-painting-mansfield-7',
     'gallery22': 'original-canvas-painting-mansfield-8',
-    'gallery23': 'nature-painting-nottinghamshire-8',
+
     'gallery24': 'local-artist-painting-mansfield-8',
     'gallery25': 'original-canvas-painting-mansfield-9',
     'gallery26': 'nature-painting-nottinghamshire-9',
     'gallery27': 'local-artist-painting-mansfield-9',
     'gallery28': 'original-canvas-painting-mansfield-10',
     'gallery29': 'nature-painting-nottinghamshire-10',
-    'gallery31': 'local-artist-painting-mansfield-10',
+
     'gallery33': 'original-canvas-painting-mansfield-11',
     'gallery34': 'nature-painting-nottinghamshire-11',
     'gallery35': 'local-artist-painting-mansfield-11',
