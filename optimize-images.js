@@ -32,7 +32,7 @@ const targetDirs = {
 const galleryImageNames = {
     'gallery1': 'original-canvas-painting-mansfield-1',
     'gallery2': 'nature-painting-nottinghamshire-1',
-    'gallery3': 'local-artist-painting-mansfield-1',
+
     'gallery4': 'original-canvas-painting-mansfield-2',
     'gallery5': 'nature-painting-nottinghamshire-2',
     'gallery6': 'local-artist-painting-mansfield-2',

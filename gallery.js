@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryImages = [
         { id: 'gallery1', name: 'original-canvas-painting-mansfield-1' },
         { id: 'gallery2', name: 'nature-painting-nottinghamshire-1' },
-        { id: 'gallery3', name: 'local-artist-painting-mansfield-1' },
+
         { id: 'gallery4', name: 'original-canvas-painting-mansfield-2' },
         { id: 'gallery5', name: 'nature-painting-nottinghamshire-2' },
         { id: 'gallery6', name: 'local-artist-painting-mansfield-2' },
