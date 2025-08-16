@@ -7,7 +7,14 @@ export const dynamic = 'force-dynamic';
 const FullscreenMount = NextDynamic(() => import('@/app/(site)/gallery/FullscreenMount'), { ssr: false });
 export default async function GalleryPage() {
   const desktopAssets = listDesktopGalleryAssets();
-  const images = Array.from({ length: desktopAssets.length }).map((_, i) => i + 1);
+  // Extract actual gallery numbers from existing files instead of assuming sequential numbering
+  const images = desktopAssets
+    .map(path => {
+      const match = path.match(/gallery(\d+)\.webp$/);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .filter(num => num > 0)
+    .sort((a, b) => a - b);
   const products = await getAllProducts().catch(() => []);
   const mappings = listAdminImageMappings();
   const frontByIndex = new Map<number, string>();
