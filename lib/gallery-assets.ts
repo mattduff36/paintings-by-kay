@@ -35,17 +35,38 @@ function extractImgNumber(filename: string): number | null {
 export function listAdminImageMappings(): AdminImageMapping[] {
   const displayDir = path.join(process.cwd(), 'public', 'images', 'raw_images', 'Display');
   const frontDir = path.join(process.cwd(), 'public', 'images', 'raw_images', 'Front', 'originals');
-  if (!fs.existsSync(displayDir)) return [];
+  const galleryDir = path.join(process.cwd(), 'public', 'images', 'gallery', 'desktop');
+  
+  if (!fs.existsSync(displayDir) || !fs.existsSync(galleryDir)) return [];
 
+  // Get actual gallery numbers that exist
+  const existingGalleryNumbers = fs
+    .readdirSync(galleryDir)
+    .filter((f) => f.endsWith('.webp'))
+    .map((f) => {
+      const match = f.match(/gallery(\d+)\.webp$/);
+      return match ? Number.parseInt(match[1], 10) : 0;
+    })
+    .filter((n) => n > 0)
+    .sort((a, b) => a - b);
+
+  // Get Display images sorted by number
   const displayFiles = fs
     .readdirSync(displayDir)
     .filter((f) => /\.jpe?g$/i.test(f) && extractImgNumber(f) !== null)
     .sort((a, b) => (extractImgNumber(a)! - extractImgNumber(b)!));
 
-  return displayFiles.map((filename, idx) => {
-    const n = extractImgNumber(filename)!; // safe due to filter above
+  // Map each existing gallery number to its corresponding Display/Front images
+  return existingGalleryNumbers.map((galleryNum, idx) => {
+    // Get the Display file for this position in the sorted list
+    const displayFile = displayFiles[idx];
+    if (!displayFile) {
+      throw new Error(`No Display image found for gallery${galleryNum}`);
+    }
+
+    const n = extractImgNumber(displayFile)!;
     const frontNumber = n - 1;
-    const displayPath = `/images/raw_images/Display/${filename}`;
+    const displayPath = `/images/raw_images/Display/${displayFile}`;
     const expectedFront = `IMG_${frontNumber}.JPEG`;
     const expectedFrontLower = `IMG_${frontNumber}.jpeg`;
     const hasFrontUpper = fs.existsSync(path.join(frontDir, expectedFront));
@@ -56,11 +77,10 @@ export function listAdminImageMappings(): AdminImageMapping[] {
       ? `/images/raw_images/Front/originals/${expectedFrontLower}`
       : displayPath;
 
-    const index = idx + 1;
-    const galleryDesktopPath = `/images/gallery/desktop/gallery${index}.webp`;
+    const galleryDesktopPath = `/images/gallery/desktop/gallery${galleryNum}.webp`;
 
     return {
-      index,
+      index: galleryNum, // Use actual gallery number, not sequential index
       galleryDesktopPath,
       displayPath,
       adminThumbPath,
